@@ -1,57 +1,103 @@
-# 🍳 JustCookDaily — Advanced AI Autoblog Automation
+# 🍳 JustCookDaily — Advanced AI Autoblog Automation (v5)
 
-This private repository contains the highly advanced, fully automated **n8n workflow** powering the recipe blog [JustCookDaily.com](https://justcookdaily.com/).
+This private repository contains the enterprise-grade **n8n workflow** powering [JustCookDaily.com](https://justcookdaily.com/). This system generates highly authoritative, AI-driven culinary content that meets strict Google AdSense and E-E-A-T guidelines.
 
-This workflow is an enterprise-grade AI automation system that completely autonomous long-form (2,000–2,500 words), highly SEO-optimized cooking articles directly from live RSS feeds. 
+---
 
-## 🚀 Advanced Core Features
+## 🏗️ 1. Core Architecture & Pipeline
+The workflow follows a linear, fail-safe pipeline from trend discovery to production deployment.
 
-### 1. 🔄 Intelligent RSS Feed Rotation Engine
-Rather than relying on generic topic generators or single sources, the workflow utilizes a custom **Feed Rotation Engine**. It actively scrapes from a curated list of over **25+ authority cooking blogs** (e.g., Serious Eats, Bon Appétit, AllRecipes).
-- **Randomized Rotation:** Each run dynamically selects a different premium feed.
-- **Deduplication:** Prevents publishing the same recipe topic within a 60-day rolling window using n8n's global workflow static data.
+### 1.1 Trigger System
+- **Dual-Schedule Triggers:** The system executes twice daily (10:00 AM and 04:30 PM Kyiv Time) to ensure a steady stream of fresh content.
+- **Timezone Aware:** Configured for the Europe/Kyiv timezone.
 
-### 2. 🧠 Gemini 2.5 Flash Autonomous Writer
-The workflow deeply integrates with Google's latest **Gemini 2.5 Flash AI model**. 
-- **100% Original Content Generation:** It doesn't summarize the RSS feed; it reads the topic and writes an entirely new, 2,500-word authoritative guide from scratch.
-- **Strict SEO Structure Enforcement:** Enforces rigorous Markdown outputs, ensuring the presence of Titles, Slugs, Meta Descriptions, Categories (mapped to WP IDs), diverse Tags, compelling Excerpts, multiple `<h2>` and `<h3>` tags, and contextual FAQs.
-- **Robust Markdown Parsing:** A custom-built, fail-safe parser automatically cleans and interprets Gemini's markdown deviations to prevent data loss.
+### 1.2 Intelligent Topic Discovery (`Fetch Cooking RSS Feeds`)
+- **Multi-Feed Rotation:** The system maintains a database of 50+ authority cooking feeds (e.g., Serious Eats, Bon Appétit, Simply Recipes).
+- **Randomized Selection:** Each run shuffles the feed list and attempts to fetch the top 6. It selects the first one that successfully returns data.
+- **Fallback Engine:** If all 50+ RSS feeds are down, the system utilizes a curated hard-coded pool of 40 high-intent evergreen cooking topics to ensure the blog never misses a post.
 
-### 3. 🖼️ Contextual & Deduplicated Pexels Imagery
-Visually stunning content requires gorgeous imagery. The workflow integrates with the **Pexels API** in a highly context-aware manner.
-- **Multi-Injection:** Seamlessly embeds three high-resolution images natively into the flow of the article: 
-    1. A beautiful finished-plate hero shot.
-    2. A fresh, raw ingredient laydown.
-    3. An active cooking process action shot.
-- **Global Memory Deduplication:** Specifically engineered with an active tracker/Set inside the logic execution. It actively checks previous image IDs fetched *during the execution loop* to **guarantee no duplicate images ever appear** on the same post, even for identical API search queries.
+### 1.3 Deduplication & State Management
+- **60-Day Rolling Window:** Uses n8n's Static Data to track every published topic. It prevents the same recipe from being processed twice within a two-month period.
+- **Article Counter:** Tracks global publication count to trigger specific Call-to-Action (CTA) events every 20 articles.
 
-### 4. 🌐 Smart & AdSense-Compliant Linking Architecture
-- **Inbound Linking Retention:** Updated to dynamically inject exactly **2 internal links** to relevant JustCookDaily categories, optimizing for crawl depth without over-optimizing.
-- **Strict Outbound Authority:** Now strictly references a maximum of **2 high-authority scientific or research-based sources** (e.g., USDA, Harvard Nutrition, or scientific journals) to build topical authority and trustworthiness while removing all competitor recipe blog links.
+---
 
-### 5. 🏛️ Dual-Source Image Integration (Pexels + Wikimedia)
-The workflow now employs a multi-source image strategy to enhance AdSense approval chances and provide educational value.
-- **Wikimedia Commons Integration:** Dynamically fetches historical or botanical images from Wikimedia Commons for certain sections, providing food science context.
-- **Copyright & Attribution Engine:** Automatically generates and appends mandatory license and credit information for every Wikimedia image used, ensuring 100% legal compliance.
-- **High-Resolution Pexels Shots:** Continues to use Pexels for high-quality food photography (hero, ingredient, and process shots).
+## 🧠 2. The Content Engine (Gemini 2.5 Flash)
+The "brain" of the operation uses advanced prompt engineering to move beyond standard AI summaries.
 
-## 📊 AdSense & E-E-A-T Optimization (Recent Updates)
-The system has been specifically overhauled to meet Google AdSense's strict quality guidelines:
-- **E-E-A-T Focus:** Gemini prompts now mandate the inclusion of **Food Science** (molecular changes during cooking) and **Historical Context** (origins of dishes) to demonstrate expertise and authoritativeness.
-- **Human-Centric Tone:** Specific filters remove generic AI phrases and "AdSense-seeking" language, resulting in more natural, first-person-style narratives.
-- **Length & Depth:** Articles are structured to be between **1,500 and 2,000+ words**, exceeding the average recipe blog post depth.
+### 2.1 Prompt Strategy: E-E-A-T Optimization
+The Gemini prompts are specifically engineered for:
+- **Food Science Integration:** Mandates explanations of chemical processes like the Maillard Reaction, emulsification, and protein denaturation.
+- **Historical Context:** Forces a dedicated section on the cultural and regional evolution of the dish.
+- **Nutritional Expertise:** Includes specific data on vitamins, minerals, and caloric density from a "scientific authority" perspective.
+- **Human Tone Filters:** Explicitly bans AI boilerplate phrases and forces the inclusion of personal expertise markers like *"One trick I discovered after years in the kitchen..."*
 
-## ⚙️ How to Deploy Flow to n8n
-1. Navigate to your n8n workspace.
-2. Select **Add Workflow**.
-3. Choose **Import from File...** and upload the main `.json` file (`justcookdaily.com — Gemini Google Trends Auto Blog_ — Expiry Date_ 11 April 2027 (Valid for 1 year) — Buyer_ dalfins33.json`).
-4. **Ensure Credentials:** Update the `Build Config` node with your active API keys (`Pexels`, `Gemini`, `WordPress`, and `Wikimedia` if applicable).
-5. Set the Master Switch to **Active**. The system is mapped to run automatically at **10:00 AM** and **4:30 PM (Kyiv Time)** every single day.
+### 2.2 Output Structure
+Gemini outputs a structured block containing:
+- **SEO Title & Slug:** Optimized 8-12 word titles.
+- **Metadata:** 130-155 character meta-descriptions.
+- **Image Queries:** Structured search terms for Pexels and Wikimedia.
+- **Semantic HTML:** Pure HTML structure including `<h2>`, `<h3>`, `<ul>`, and `<ol>` tags.
 
-## 🧪 Local Testing Suite
-A Python simulator script (`test_workflow.py`) has been included in the repository. This enables developers to test the upstream API connections outside of the n8n environment without publishing directly to WordPress.
-- Run `python test_workflow.py` to trigger an end-to-end simulation covering RSS Fetching, Prompt Injection, Gemini Article generation, and Pexels/Wikimedia integration.
+---
+
+## 🖼️ 3. Visual & Media System
+### 3.1 Dual-Source Imagery (Pexels + Wikimedia)
+- **Pexels API:** Fetches 3 high-resolution inline images: (1) Finished Plate, (2) Raw Ingredients, (3) Action Shot.
+- **Wikimedia Commons:** Used for historical or botanical imagery to add educational value.
+- **Global Image Deduplication:** Tracks image IDs within the execution loop and across historical data to ensure no duplicate photos ever appear on the same post.
+
+### 3.2 Automated Attribution Engine
+- **Legal Compliance:** Every image is wrapped in a HTML `<figure>` and `<figcaption>` block.
+- **Dynamic Credits:** Automatically formats the photographer's name, source (Pexels/Wikimedia), and a direct link to the license (CC BY-SA 4.0 or Pexels License).
+
+---
+
+## 🔗 4. SEO & Linking Logic
+### 4.1 Internal Link Strategy
+- **Constraint:** Maximum of 2 internal links per post.
+- **Logic:** Randomly selects 2 relevant category pages from JustCookDaily.com to preserve internal link juice without appearing spammy.
+
+### 4.2 Outbound Authority Links (AdSense Compliance)
+- **Scientific Focus Only:** The system bans all external links to other recipe blogs.
+- **Authority Sources:** Only 2 outbound links are allowed, sourced randomly from a whitelist of high-authority domains:
+  - USDA FoodData Central
+  - Harvard Nutrition Source
+  - WHO
+  - National Institutes of Health (NIH)
+  - American Heart Association
+
+### 4.3 Structural SEO
+- **Table of Contents (TOC):** Dynamically generated at the top of every post with anchor links for better user navigation and Google "Jump-To" link indexing.
+- **Semantic HTML5:** Uses proper heading hierarchy and standard tags, ensuring 100% crawlability.
+
+---
+
+## 🛠️ 5. How to Insert API Keys & Setup
+To get the workflow running, you must configure your credentials in n8n.
+
+1. **Import the Workflow:** Upload the `.json` file to your n8n instance.
+2. **Locate the ⚙️ SETUP Node:** This is the first `Set` node in the workflow.
+3. **Insert Keys:**
+   - **Gemini API Key:** Get it from [Google AI Studio](https://aistudio.google.com/).
+   - **Pexels API Key:** Get it from [Pexels API](https://www.pexels.com/api/).
+   - **WordPress Details:**
+     - **URL:** Your site URL (e.g., `https://justcookdaily.com`).
+     - **User:** Your WP username.
+     - **Application Password:** Create this in WordPress (Users -> Profile -> Application Passwords).
+4. **Save & Activate:** Click "Save" and ensure the "Active" toggle is ON.
+
+---
+
+## 🧪 6. Testing & Maintenance
+### `test_workflow.py`
+This repository includes a Python simulation script that allows you to:
+- Verify the RSS scraping logic.
+- Test the Gemini prompt output without spending WordPress credits.
+- Preview the image query logic.
+
+> [!TIP]
+> **Maintenance Tip:** All API keys and fundamental configurations (URL, User, Passwords) are centralized in the **⚙️ SETUP** node. If you change your WordPress password or rotate API keys, you only need to update them in that single node.
 
 ---
 *Maintained Exclusively for JustCookDaily.*
-
