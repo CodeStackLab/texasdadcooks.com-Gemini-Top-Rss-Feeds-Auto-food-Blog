@@ -117,6 +117,12 @@
               "name": "buyer_email",
               "value": "pavel@xonefy.com",
               "type": "string"
+            },
+            {
+              "id": "a9",
+              "name": "mistral_api_key",
+              "value": "a8t8hyuyXgpqfufxcH0DrxODinpLx9iC",
+              "type": "string"
             }
           ]
         },
@@ -173,10 +179,10 @@
     },
     {
       "parameters": {
-        "jsCode": "// ============================================\n// PREPARE GEMINI PROMPT — v6 FORCED CATEGORY\n// The category is PRE-ASSIGNED by round-robin rotation\n// Gemini MUST write for this specific category\n// ============================================\nconst topic = $json.trendingTopic;\nconst context = $json.context || '';\nconst sourceContent = $json.sourceContent || '';\nconst catLines = $json._catList.split('\\n').map(l => l.trim()).filter(Boolean);\nconst forcedCatId = $json._forcedCategoryId || 27;\nconst forcedCatName = $json._forcedCategoryName || 'Quick & Easy Recipes';\n\nconst topicClean = topic.replace(/[^a-zA-Z0-9 ]/g,' ').trim();\n\nconst prompt = `You are a senior culinary journalist and food science writer for texasdadcooks.com. Write a COMPLETELY ORIGINAL, deeply researched, and engaging cooking article in English.\n\nINSPIRATION TOPIC: \"${topic}\"\n${context ? `BRIEF CONTEXT: \"${context.substring(0,500)}\"` : ''}\n${sourceContent ? `REFERENCE (for inspiration ONLY — DO NOT COPY): \"${sourceContent.substring(0,1200)}\"` : ''}\n\n🔴 MANDATORY CATEGORY ASSIGNMENT 🔴\nYou MUST write this article for category: ${forcedCatId} = ${forcedCatName}\nDo NOT choose a different category. The CATEGORY line in your output MUST be exactly: ${forcedCatId}\nAdapt the topic/angle to fit naturally within the \"${forcedCatName}\" category.\nFor example, if the topic is about chicken but the category is \"Breakfast Recipes\", write about a breakfast chicken dish.\n\nCRITICAL WRITING RULES:\n- Write a 100% ORIGINAL article — do NOT copy any text from the reference.\n- Create YOUR OWN unique title, your own angle, your own structure.\n- The article MUST fit naturally in the \"${forcedCatName}\" category.\n- English only. Warm, friendly, conversational yet authoritative tone.\n- Target length: 800 to 1200 words TOTAL — detailed, thorough, comprehensive.\n- NO H1 tag. NO promotional text. NO filler. NO placeholders like [content].\n- Include REAL food science explanations (e.g. Maillard reaction, emulsification, gluten development).\n- Reference nutritional facts with specific data (calories, protein, vitamins) where relevant.\n- Each H2 section: 2-3 solid, well-researched paragraphs. Make it feel human-written and authoritative.\n- Add personal touches like \"I love adding...\" or \"One trick I discovered after years of cooking...\"\n- Include specific measurements (grams, cups), temperatures (°F/°C), and timing.\n- Write naturally as a real person sharing their cooking expertise — avoid robotic or formulaic language.\n- Include interesting historical or cultural context about the dish.\n- Mention health benefits backed by nutrition science (reference vitamins, minerals, antioxidants).\n\nLINKING RULES (VERY IMPORTANT):\n- Do NOT include any external links to recipe blogs, food magazines, or commercial cooking sites.\n- NEVER mention Wikipedia, Wikimedia, Wikimedia Commons, or any encyclopedia by name anywhere in the article text.\n- Do NOT write phrases like \"as detailed on Wikimedia\" or \"according to Wikipedia\" — NEVER reference any source by name in the content.\n- Focus on ORIGINAL knowledge — share YOUR expertise, not links to other sites.\n\nOUTPUT — write EXACTLY this structure:\n\nTITLE: [YOUR OWN unique long-tail SEO title, 8-12 words — MUST fit \"${forcedCatName}\" category]\nCATEGORY: ${forcedCatId}\nSLUG: [seo-friendly-slug-max-60-chars]\nMETA: [SEO meta description 130-155 chars]\nTAGS: [tag1],[tag2],[tag3],[tag4],[tag5],[tag6]\nEXCERPT: [2 compelling sentences that hook the reader]\nQUERY1: [Pexels search: beautiful finished plate of this dish, specific and descriptive]\nQUERY2: [Pexels search: fresh raw ingredients for this dish on wooden cutting board]\nQUERY3: [Pexels search: close-up cooking process action shot for this dish]\n\n===START===\n\n<p>[Strong opening hook — personal story, surprising food science fact, or cultural insight about this dish. Make the reader feel your passion for cooking.]</p>\n\n<h2>The Rich History and Cultural Roots of This Dish</h2>\n<p>[2-3 paragraphs: dive into the origin, cultural significance, and how this dish evolved. Include specific historical details.]</p>\n\n<h2>Why This Recipe Works: The Food Science Behind It</h2>\n<p>[2 paragraphs explaining the food science — Maillard reaction, caramelization, emulsification, protein denaturation etc.]</p>\n\n<h2>Complete Ingredient Breakdown</h2>\n<p>[Detailed ingredient list organized by component (base, seasoning, garnish). Explain why key ingredients are used.]</p>\n\n<h2>Step-by-Step Instructions</h2>\n<p>[A detailed guide on how to prepare the dish from start to finish. Include timing and temperatures.]</p>\n\n<h2>Expert Tips from Years of Kitchen Experience</h2>\n<p>[3-4 specific bullet points with expert advice on temperature, quality, and seasoning.]</p>\n\n<h2>Nutritional Benefits and Health Insights</h2>\n<p>[2 paragraphs about minerals, vitamins, and health benefits of key ingredients.]</p>\n\n<h2>Final Thoughts</h2>\n<p>[Warm closing — share your emotional connection to this dish and encourage experimentation.]</p>\n\n===END===\n\nREMINDER: Write GENUINE, in-depth content in every section. Target 800-1200 words total. CATEGORY MUST BE ${forcedCatId}.`;\n\nreturn [{ json: {\n  ...$json,\n  _geminiBody: {\n    contents: [{ parts: [{ text: prompt }] }],\n    generationConfig: {\n      maxOutputTokens: 8192,\n      temperature: 0.72\n    },\n    safetySettings: [\n      { \"category\": \"HARM_CATEGORY_HARASSMENT\", \"threshold\": \"BLOCK_NONE\" },\n      { \"category\": \"HARM_CATEGORY_HATE_SPEECH\", \"threshold\": \"BLOCK_NONE\" },\n      { \"category\": \"HARM_CATEGORY_SEXUALLY_EXPLICIT\", \"threshold\": \"BLOCK_NONE\" },\n      { \"category\": \"HARM_CATEGORY_DANGEROUS_CONTENT\", \"threshold\": \"BLOCK_NONE\" }\n    ]\n  }\n} }];"
+        "jsCode": "// ============================================\n// PREPARE AI PROMPTS — v6 MISTRAL + GEMINI\n// Gemini serves as a fallback if Mistral fails\n// ============================================\nconst topic = $json.trendingTopic;\nconst context = $json.context || '';\nconst sourceContent = $json.sourceContent || '';\nconst forcedCatId = $json._forcedCategoryId || 27;\nconst forcedCatName = $json._forcedCategoryName || 'Quick & Easy Recipes';\n\nconst prompt = `You are a senior culinary journalist and food science writer for texasdadcooks.com. Write a COMPLETELY ORIGINAL, deeply researched, and engaging cooking article in English.\n\nINSPIRATION TOPIC: \"${topic}\"\n${context ? `BRIEF CONTEXT: \"${context.substring(0,500)}\"` : ''}\n${sourceContent ? `REFERENCE (for inspiration ONLY — DO NOT COPY): \"${sourceContent.substring(0,1200)}\"` : ''}\n\n🔴 MANDATORY CATEGORY ASSIGNMENT 🔴\nYou MUST write this article for category: ${forcedCatId} = ${forcedCatName}\nAdapt the topic to fit naturally within the \"${forcedCatName}\" category.\n\nCRITICAL WRITING RULES:\n- Write a 100% ORIGINAL article — do NOT copy any text from the reference.\n- English only. Warm, friendly, conversational yet authoritative tone.\n- Target length: 800 to 1200 words TOTAL — detailed, thorough, comprehensive.\n- NO H1 tag. NO promotional text. NO placeholders like [content].\n- Include REAL food science (e.g. Maillard reaction, emulsification) and nutritional insights.\n- Each H2 section: 2-3 solid, well-researched paragraphs. Make it feel human-written.\n- Include specific measurements, temperatures (°F/°C), and timing.\n- NEVER mention Wikipedia or Wikimedia by name.\n\nOUTPUT — write EXACTLY this structure:\n\nTITLE: [YOUR OWN unique long-tail SEO title, 8-12 words — MUST fit \"${forcedCatName}\" category]\nCATEGORY: ${forcedCatId}\nSLUG: [seo-friendly-slug-max-60-chars]\nMETA: [SEO meta description 130-155 chars]\nTAGS: [tag1],[tag2],[tag3],[tag4],[tag5],[tag6]\nEXCERPT: [2 compelling sentences that hook the reader]\nQUERY1: [Pexels search: beautiful finished plate of this dish]\nQUERY2: [Pexels search: fresh raw ingredients on wooden cutting board]\nQUERY3: [Pexels search: close-up cooking process action shot]\n\n===START===\n\n<p>[Strong opening hook about this dish.]</p>\n\n<h2>The Rich History and Cultural Roots of This Dish</h2>\n<p>[2-3 paragraphs about origin and evolution.]</p>\n\n<h2>Why This Recipe Works: The Food Science Behind It</h2>\n<p>[2 paragraphs explaining the science like Maillard reaction or caramelization.]</p>\n\n<h2>Complete Ingredient Breakdown</h2>\n<p>[Detailed ingredient list with explanations of why they are used.]</p>\n\n<h2>Step-by-Step Instructions</h2>\n<p>[A detailed guide on how to prepare the dish from start to finish.]</p>\n\n<h2>Expert Tips from Years of Kitchen Experience</h2>\n<p>[3-4 specific bullet points with expert advice.]</p>\n\n<h2>Nutritional Benefits and Health Insights</h2>\n<p>[2 paragraphs about minerals, vitamins, and health benefits.]</p>\n\n<h2>Final Thoughts</h2>\n<p>[Warm closing and encouragement.]</p>\n\n===END===\n\nREMINDER: Target 1000 words. CATEGORY MUST BE ${forcedCatId}.`;\n\nreturn [{ json: {\n  ...$json,\n  _mistralBody: {\n    model: \"mistral-large-latest\",\n    messages: [{ role: \"user\", content: prompt }],\n    temperature: 0.7,\n    max_tokens: 4000\n  },\n  _geminiBody: {\n    contents: [{ parts: [{ text: prompt }] }],\n    generationConfig: {\n      maxOutputTokens: 8192,\n      temperature: 0.72\n    },\n    safetySettings: [\n      { \"category\": \"HARM_CATEGORY_HARASSMENT\", \"threshold\": \"BLOCK_NONE\" },\n      { \"category\": \"HARM_CATEGORY_HATE_SPEECH\", \"threshold\": \"BLOCK_NONE\" },\n      { \"category\": \"HARM_CATEGORY_SEXUALLY_EXPLICIT\", \"threshold\": \"BLOCK_NONE\" },\n      { \"category\": \"HARM_CATEGORY_DANGEROUS_CONTENT\", \"threshold\": \"BLOCK_NONE\" }\n    ]\n  }\n} }];"
       },
       "id": "c67eb1c8-6c6a-4fe1-99c4-f231994ac93a",
-      "name": "Prepare Gemini Prompt",
+      "name": "Prepare AI Prompts",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
@@ -189,13 +195,47 @@
         "jsCode": "return $input.all();"
       },
       "id": "3aa78e2d-457e-467b-a3fd-08eb5247eb60",
-      "name": "Wait Before Gemini",
+      "name": "Wait Before AI",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
         11392,
         -1424
       ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.mistral.ai/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ 'Bearer ' + $('⚙️ SETUP').item.json.mistral_api_key }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json._mistralBody) }}",
+        "options": {
+          "timeout": 300000
+        }
+      },
+      "id": "7d949216-724c-4e8c-8591-9257620e7f7c",
+      "name": "Generate Article HTML (Mistral)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        11504,
+        -1616
+      ],
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -242,7 +282,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// ============================================\n// EXTRACT & STORE HTML — v6 FORCED CATEGORY\n// Always uses the forced category from round-robin\n// ============================================\nconst raw = $json.candidates?.[0]?.content?.parts?.[0]?.text || '';\nconst trendData = $('Format Categories for Gemini').first().json;\nconst topicFallback = trendData.trendingTopic || 'Easy Cooking Recipes';\nconst forcedCatId = trendData._forcedCategoryId || 27;\n\nconst validIds = [1,36,39,40,41,42,43,44,45,46];\n\nif (!raw || raw.length < 100) {\n  return [{ json: {\n    ...trendData,\n    title: topicFallback + ': Complete Cooking Guide',\n    articleHTML: '', category_id: forcedCatId,\n    slug: topicFallback.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').substring(0,60),\n    metaDescription: `Easy recipes about ${topicFallback} on texasdadcooks.com.`,\n    excerpt: `Discover delicious recipes for ${topicFallback} on texasdadcooks.com.`,\n    tags: ['recipes','cooking','easy meals','food','kitchen','homemade'],\n    imgQuery1: (topicFallback + ' recipe').substring(0, 100),\n    imgQuery2: (topicFallback + ' ingredients').substring(0, 100),\n    imgQuery3: (topicFallback + ' cooking').substring(0, 100),\n    _hasContent: false\n  } }];\n}\n\nconst lines = raw.split('\\n');\nlet title='', slug='', categoryId=forcedCatId, metaDesc='', tagsRaw='', excerpt='', imgQ1='', imgQ2='', imgQ3='';\nlet articleStart = -1;\n\nfor (let i = 0; i < lines.length; i++) {\n  const t = lines[i].trim();\n  if (t.startsWith('TITLE:'))    title    = t.slice(6).trim();\n  if (t.startsWith('CATEGORY:')) { /* IGNORE Gemini's category — we use forced category */ }\n  if (t.startsWith('SLUG:'))     slug     = t.slice(5).trim().toLowerCase().replace(/[^a-z0-9-]/g,'').substring(0,60);\n  if (t.startsWith('META:'))     metaDesc = t.slice(5).trim().substring(0,155);\n  if (t.startsWith('TAGS:'))     tagsRaw  = t.slice(5).trim();\n  if (t.startsWith('EXCERPT:'))  excerpt  = t.slice(8).trim();\n  if (t.startsWith('QUERY1:'))   imgQ1    = t.slice(7).trim();\n  if (t.startsWith('QUERY2:'))   imgQ2    = t.slice(7).trim();\n  if (t.startsWith('QUERY3:'))   imgQ3    = t.slice(7).trim();\n  if (t.startsWith('WIKI_TOPIC:')) { /* consume and discard wiki topic metadata */ }\n  if (t.includes('START===')) { articleStart = i + 1; break; }\n}\n\n// ALWAYS use the forced category from round-robin — NEVER Gemini's choice\ncategoryId = forcedCatId;\n\nif (articleStart === -1) {\n  const q3Idx = lines.findIndex(l => l.includes('QUERY3:'));\n  if (q3Idx !== -1) articleStart = q3Idx + 1;\n}\n\nlet articleHTML = '';\nif (articleStart >= 0) {\n  const rest = lines.slice(articleStart);\n  const endIdx = rest.findIndex(l => l.includes('END==='));\n  articleHTML = (endIdx >= 0 ? rest.slice(0, endIdx) : rest).join('\\n').trim();\n} else {\n  articleHTML = raw;\n}\narticleHTML = articleHTML.replace(/^```html\\s*/i,'').replace(/^```\\s*/,'').replace(/```\\s*$/,'').trim();\n\n// Strip leaked WIKI_TOPIC metadata and Wikipedia/Wikimedia mentions\narticleHTML = articleHTML.replace(/^\\s*WIKI_TOPIC:.*$/gm, '').trim();\narticleHTML = articleHTML.replace(/\\([^)]*(?:Wikipedia|Wikimedia)[^)]*\\)/gi, '');\narticleHTML = articleHTML.replace(/,?\\s*as (?:detailed|described|documented|noted|referenced|mentioned) (?:on|in|by|at|via) (?:Wikipedia|Wikimedia)[^.,;)]*[.,;)]?/gi, '');\narticleHTML = articleHTML.replace(/,?\\s*according to (?:Wikipedia|Wikimedia)[^.,;)]*[.,;)]?/gi, '');\n\n// Convert markdown headers just in case Gemini ignored the HTML instruction\narticleHTML = articleHTML.replace(/^###\\s+(.+)$/gm, '<h3>$1</h3>');\narticleHTML = articleHTML.replace(/^##\\s+(.+)$/gm, '<h2>$1</h2>');\n\n// Convert markdown bolding and bullet points\narticleHTML = articleHTML.replace(/\\*\\*(.*?)\\*\\*/g, '<strong>$1</strong>');\narticleHTML = articleHTML.replace(/__(.*?)__/g, '<strong>$1</strong>');\narticleHTML = articleHTML.replace(/^\\s*[\\*\\-]\\s+(.+)$/gm, '<p>&#8226; $1</p>');\n\nlet tags = tagsRaw.split(',').map(t => t.replace(/[\\[\\]\"']/g,'').trim()).filter(t=>t.length>1).slice(0,6);\nif (tags.length < 3) tags = ['recipes','cooking','easy meals','food','kitchen','homemade'];\n\nconst topicCleanForImg = topicFallback.replace(/[^a-zA-Z0-9 ]/g,' ').trim();\nconst topicSafe = topicCleanForImg.split(' ').slice(0,3).join(' ');\n\nconst finalImgQ1 = (imgQ1 || topicSafe + ' food').substring(0, 100);\nconst finalImgQ2 = (imgQ2 || topicSafe + ' cooking').substring(0, 100);\nconst finalImgQ3 = (imgQ3 || topicSafe + ' ingredients').substring(0, 100);\n\nconst hasH2 = articleHTML.includes('<h2') || articleHTML.includes('<h3');\nconst hasContent = articleHTML.length > 300 && hasH2;\n\nreturn [{ json: {\n  ...trendData, \n  imgQuery1: finalImgQ1, \n  imgQuery2: finalImgQ2, \n  imgQuery3: finalImgQ3,\n  title, articleHTML: hasContent ? articleHTML : '',\n  category_id: categoryId, slug, metaDescription: metaDesc,\n  excerpt, tags, _hasContent: hasContent\n} }];"
+        "jsCode": "// ============================================\n// EXTRACT & STORE HTML — MISTRAL + GEMINI\n// Handles primary (Mistral) or fallback (Gemini)\n// ============================================\nconst mistralRaw = $json.choices?.[0]?.message?.content || '';\nconst geminiRaw = $json.candidates?.[0]?.content?.parts?.[0]?.text || '';\nconst raw = mistralRaw || geminiRaw || '';\n\nconst trendData = $('Format Categories for Gemini').first().json;\nconst topicFallback = trendData.trendingTopic || 'Easy Cooking Recipes';\nconst forcedCatId = trendData._forcedCategoryId || 27;\n\nconst validIds = [1,36,39,40,41,42,43,44,45,46];\n\nif (!raw || raw.length < 100) {\n  return [{ json: {\n    ...trendData,\n    title: topicFallback + ': Complete Cooking Guide',\n    articleHTML: '', category_id: forcedCatId,\n    slug: topicFallback.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').substring(0,60),\n    metaDescription: `Easy recipes about ${topicFallback} on texasdadcooks.com.`,\n    excerpt: `Discover delicious recipes for ${topicFallback} on texasdadcooks.com.`,\n    tags: ['recipes','cooking','easy meals','food','kitchen','homemade'],\n    imgQuery1: (topicFallback + ' recipe').substring(0, 100),\n    imgQuery2: (topicFallback + ' ingredients').substring(0, 100),\n    imgQuery3: (topicFallback + ' cooking').substring(0, 100),\n    _hasContent: false\n  } }];\n}\n\nconst lines = raw.split('\\n');\nlet title='', slug='', categoryId=forcedCatId, metaDesc='', tagsRaw='', excerpt='', imgQ1='', imgQ2='', imgQ3='';\nlet articleStart = -1;\n\nfor (let i = 0; i < lines.length; i++) {\n  const t = lines[i].trim();\n  if (t.startsWith('TITLE:'))    title    = t.slice(6).trim();\n  if (t.startsWith('CATEGORY:')) { /* IGNORE Gemini's category — we use forced category */ }\n  if (t.startsWith('SLUG:'))     slug     = t.slice(5).trim().toLowerCase().replace(/[^a-z0-9-]/g,'').substring(0,60);\n  if (t.startsWith('META:'))     metaDesc = t.slice(5).trim().substring(0,155);\n  if (t.startsWith('TAGS:'))     tagsRaw  = t.slice(5).trim();\n  if (t.startsWith('EXCERPT:'))  excerpt  = t.slice(8).trim();\n  if (t.startsWith('QUERY1:'))   imgQ1    = t.slice(7).trim();\n  if (t.startsWith('QUERY2:'))   imgQ2    = t.slice(7).trim();\n  if (t.startsWith('QUERY3:'))   imgQ3    = t.slice(7).trim();\n  if (t.startsWith('WIKI_TOPIC:')) { /* consume and discard wiki topic metadata */ }\n  if (t.includes('START===')) { articleStart = i + 1; break; }\n}\n\n// ALWAYS use the forced category from round-robin — NEVER Gemini's choice\ncategoryId = forcedCatId;\n\nif (articleStart === -1) {\n  const q3Idx = lines.findIndex(l => l.includes('QUERY3:'));\n  if (q3Idx !== -1) articleStart = q3Idx + 1;\n}\n\nlet articleHTML = '';\nif (articleStart >= 0) {\n  const rest = lines.slice(articleStart);\n  const endIdx = rest.findIndex(l => l.includes('END==='));\n  articleHTML = (endIdx >= 0 ? rest.slice(0, endIdx) : rest).join('\\n').trim();\n} else {\n  articleHTML = raw;\n}\narticleHTML = articleHTML.replace(/^```html\\s*/i,'').replace(/^```\\s*/,'').replace(/```\\s*$/,'').trim();\n\n// Strip leaked WIKI_TOPIC metadata and Wikipedia/Wikimedia mentions\narticleHTML = articleHTML.replace(/^\\s*WIKI_TOPIC:.*$/gm, '').trim();\narticleHTML = articleHTML.replace(/\\([^)]*(?:Wikipedia|Wikimedia)[^)]*\\)/gi, '');\narticleHTML = articleHTML.replace(/,?\\s*as (?:detailed|described|documented|noted|referenced|mentioned) (?:on|in|by|at|via) (?:Wikipedia|Wikimedia)[^.,;)]*[.,;)]?/gi, '');\narticleHTML = articleHTML.replace(/,?\\s*according to (?:Wikipedia|Wikimedia)[^.,;)]*[.,;)]?/gi, '');\n\n// Convert markdown headers just in case Gemini ignored the HTML instruction\narticleHTML = articleHTML.replace(/^###\\s+(.+)$/gm, '<h3>$1</h3>');\narticleHTML = articleHTML.replace(/^##\\s+(.+)$/gm, '<h2>$1</h2>');\n\n// Convert markdown bolding and bullet points\narticleHTML = articleHTML.replace(/\\*\\*(.*?)\\*\\*/g, '<strong>$1</strong>');\narticleHTML = articleHTML.replace(/__(.*?)__/g, '<strong>$1</strong>');\narticleHTML = articleHTML.replace(/^\\s*[\\*\\-]\\s+(.+)$/gm, '<p>&#8226; $1</p>');\n\nlet tags = tagsRaw.split(',').map(t => t.replace(/[\\[\\]\"']/g,'').trim()).filter(t=>t.length>1).slice(0,6);\nif (tags.length < 3) tags = ['recipes','cooking','easy meals','food','kitchen','homemade'];\n\nconst topicCleanForImg = topicFallback.replace(/[^a-zA-Z0-9 ]/g,' ').trim();\nconst topicSafe = topicCleanForImg.split(' ').slice(0,3).join(' ');\n\nconst finalImgQ1 = (imgQ1 || topicSafe + ' food').substring(0, 100);\nconst finalImgQ2 = (imgQ2 || topicSafe + ' cooking').substring(0, 100);\nconst finalImgQ3 = (imgQ3 || topicSafe + ' ingredients').substring(0, 100);\n\nconst hasH2 = articleHTML.includes('<h2') || articleHTML.includes('<h3');\nconst hasContent = articleHTML.length > 300 && hasH2;\n\nreturn [{ json: {\n  ...trendData, \n  imgQuery1: finalImgQ1, \n  imgQuery2: finalImgQ2, \n  imgQuery3: finalImgQ3,\n  title, articleHTML: hasContent ? articleHTML : '',\n  category_id: categoryId, slug, metaDescription: metaDesc,\n  excerpt, tags, _hasContent: hasContent\n} }];"
       },
       "id": "ef37609d-b64b-4eda-b714-67da360e2ba7",
       "name": "Extract & Store HTML",
@@ -650,26 +690,44 @@
       "main": [
         [
           {
-            "node": "Prepare Gemini Prompt",
+            "node": "Prepare AI Prompts",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Prepare Gemini Prompt": {
+    "Prepare AI Prompts": {
       "main": [
         [
           {
-            "node": "Wait Before Gemini",
+            "node": "Wait Before AI",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Wait Before Gemini": {
+    "Wait Before AI": {
       "main": [
+        [
+          {
+            "node": "Generate Article HTML (Mistral)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Article HTML (Mistral)": {
+      "main": [
+        [
+          {
+            "node": "Extract & Store HTML",
+            "type": "main",
+            "index": 0
+          }
+        ],
         [
           {
             "node": "Generate Article HTML (Gemini)",
