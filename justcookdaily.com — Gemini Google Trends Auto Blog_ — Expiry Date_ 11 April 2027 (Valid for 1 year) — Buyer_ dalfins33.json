@@ -255,20 +255,12 @@
     },
     {
       "parameters": {
-        "url": "={{ 'https://api.pexels.com/v1/search?query=' + encodeURIComponent($json.imgQuery1) + '&per_page=10&orientation=landscape' }}",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Authorization",
-              "value": "={{ $('Build Config').item.json._pixabayKey }}"
-            }
-          ]
-        },
+        "url": "={{ 'https://pixabay.com/api/?key=' + $('Build Config').item.json._pixabayKey + '&q=' + encodeURIComponent($json.imgQuery1) + '&per_page=10&image_type=photo&orientation=horizontal' }}",
+        "sendHeaders": false,
         "options": {}
       },
       "id": "441a120a-22bf-4445-84a8-f2271c1f26bf",
-      "name": "Fetch Inline Image 1 (Pexels)",
+      "name": "Fetch Inline Image 1 (Pixabay)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
@@ -278,20 +270,12 @@
     },
     {
       "parameters": {
-        "url": "={{ 'https://api.pexels.com/v1/search?query=' + encodeURIComponent($json.imgQuery2) + '&per_page=10&orientation=landscape' }}",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Authorization",
-              "value": "={{ $('Build Config').item.json._pixabayKey }}"
-            }
-          ]
-        },
+        "url": "={{ 'https://pixabay.com/api/?key=' + $('Build Config').item.json._pixabayKey + '&q=' + encodeURIComponent($json.imgQuery2) + '&per_page=10&image_type=photo&orientation=horizontal' }}",
+        "sendHeaders": false,
         "options": {}
       },
       "id": "effe3958-4c7b-4646-b7cc-0957382f6529",
-      "name": "Fetch Inline Image 2 (Pexels)",
+      "name": "Fetch Inline Image 2 (Pixabay)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
@@ -301,20 +285,12 @@
     },
     {
       "parameters": {
-        "url": "={{ 'https://api.pexels.com/v1/search?query=' + encodeURIComponent($json.imgQuery3) + '&per_page=10&orientation=landscape' }}",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Authorization",
-              "value": "={{ $('Build Config').item.json._pixabayKey }}"
-            }
-          ]
-        },
+        "url": "={{ 'https://pixabay.com/api/?key=' + $('Build Config').item.json._pixabayKey + '&q=' + encodeURIComponent($json.imgQuery3) + '&per_page=10&image_type=photo&orientation=horizontal' }}",
+        "sendHeaders": false,
         "options": {}
       },
       "id": "acd8bd6f-38a1-483e-b6d6-0dd6fb97f420",
-      "name": "Fetch Inline Image 3 (Pexels)",
+      "name": "Fetch Inline Image 3 (Pixabay)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
@@ -338,7 +314,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// CRITICAL: Get article data from source nodes, NOT from $input\n// $input only has Pexels photo data (Merge Images strips article data)\nlet d;\ntry {\n  const ext = $('Extract & Store HTML').first().json;\n  if (ext && (ext.title || ext.trendingTopic)) { d = ext; }\n  else { throw new Error('no data'); }\n} catch(e1) {\n  try { d = $('Error Handler (Gemini)').first().json; }\n  catch(e2) { d = $input.first().json; }\n}\nconst includeCTA = d.includeCTA || false;\nconst articleTopic = d.trendingTopic || d.title || 'cooking';\n\nconst usedImgIds = new Set();\n\nfunction pickBestImage(nodeName) {\n  try {\n    const apiResponse = $(nodeName).first().json;\n    const photos = (apiResponse && apiResponse.photos) ? apiResponse.photos : [];\n    if (photos.length === 0) return null;\n    const available = photos.filter(p => !usedImgIds.has(p.id));\n    if (available.length === 0) return null;\n    const pick = available[Math.floor(Math.random() * Math.min(4, available.length))];\n    if (!pick || !pick.src) return null;\n    usedImgIds.add(pick.id);\n    return {\n      url:   pick.src.large2x || pick.src.large || pick.src.medium || '',\n      alt:   pick.alt || '',\n      pName: pick.photographer || 'Pexels',\n      pUrl:  pick.photographer_url || 'https://www.pexels.com',\n      pgUrl: pick.url || 'https://www.pexels.com',\n      source: 'pexels'\n    };\n  } catch(e) { return null; }\n}\n\nconst img1 = pickBestImage('Fetch Inline Image 1 (Pexels)');\nconst img2 = pickBestImage('Fetch Inline Image 2 (Pexels)');\nconst img3 = pickBestImage('Fetch Inline Image 3 (Pexels)');\n\n// Build image block with FULL copyright attribution\nfunction makeImgBlock(img, headingText) {\n  if (!img || !img.url) return '';\n  const alt = ((headingText || img.alt || articleTopic) + ' — texasdadcooks.com').replace(/\"/g,\"'\").substring(0,120);\n  let credit = '';\n  if (img.source === 'wikimedia') {\n    credit = `<p style=\"font-size:11px;color:#888;text-align:center;margin:5px 0 0;font-style:italic;\">📷 Image: <a href=\"${img.pgUrl}\" target=\"_blank\" rel=\"noopener\">${img.pName}</a> via <a href=\"https://commons.wikimedia.org\" target=\"_blank\" rel=\"noopener\">Wikimedia Commons</a> — Licensed under <a href=\"${img.licenseUrl || 'https://creativecommons.org/licenses/by-sa/4.0/'}\" target=\"_blank\" rel=\"noopener\">${img.licenseName || 'CC BY-SA 4.0'}</a></p>`;\n  } else {\n    credit = img.pName\n      ? `<p style=\"font-size:11px;color:#888;text-align:center;margin:5px 0 0;font-style:italic;\">📷 Photo by <a href=\"${img.pUrl}\" target=\"_blank\" rel=\"noopener\">${img.pName}</a> on <a href=\"${img.pgUrl}\" target=\"_blank\" rel=\"noopener\">Pexels</a> — Free to use under the <a href=\"https://www.pexels.com/license/\" target=\"_blank\" rel=\"noopener\">Pexels License</a></p>`\n      : '';\n  }\n  return `<figure style=\"margin:24px 0 32px;text-align:center;\">\n<img src=\"${img.url}\" alt=\"${alt}\" width=\"800\" height=\"450\" style=\"width:100%;max-width:760px;height:auto;border-radius:10px;display:block;margin:0 auto;\" loading=\"lazy\"/>\n<figcaption>${credit}</figcaption>\n</figure>`;\n}\n\n// AUTHORITATIVE SCIENCE/RESEARCH SOURCES ONLY — no recipe blogs\nconst ALL_SOURCES = [\n  { name: 'USDA FoodData Central', url: 'https://fdc.nal.usda.gov/', context: 'nutritional data and food composition' },\n  { name: 'Harvard T.H. Chan School of Public Health', url: 'https://www.hsph.harvard.edu/nutritionsource/', context: 'evidence-based nutrition research' },\n  { name: 'World Health Organization (WHO)', url: 'https://www.who.int/news-room/fact-sheets/detail/healthy-diet', context: 'dietary guidelines and healthy eating' },\n  { name: 'National Institutes of Health (NIH)', url: 'https://ods.od.nih.gov/', context: 'vitamin and mineral research' },\n  { name: 'American Heart Association', url: 'https://www.heart.org/en/healthy-living/healthy-eating', context: 'heart-healthy cooking guidance' },\n  { name: 'Mayo Clinic', url: 'https://www.mayoclinic.org/healthy-lifestyle/nutrition-and-healthy-eating', context: 'nutrition science and health' },\n  { name: 'PubMed Central', url: 'https://www.ncbi.nlm.nih.gov/pmc/', context: 'peer-reviewed food science studies' }\n];\nconst seed = (d.slug || 'recipe').split('').reduce((a,c)=>a+c.charCodeAt(0),0);\n// Only 2 outbound links max — to research/science sources\nconst sources = ALL_SOURCES.map((s,i)=>({s,k:(seed*31+i*17)%100})).sort((a,b)=>a.k-b.k).map(x=>x.s).slice(0,2);\n\n// Only 2 internal links max\nconst ALL_INTERNAL = [\n  { anchor:'quick and easy recipes',      url:'https://texasdadcooks.com/category/quick-easy-recipes/' },\n  { anchor:'breakfast recipe ideas',      url:'https://texasdadcooks.com/category/breakfast-recipes/' },\n  { anchor:'healthy dinner recipes',      url:'https://texasdadcooks.com/category/healthy-recipes/' },\n  { anchor:'vegetarian meal ideas',       url:'https://texasdadcooks.com/category/vegetarian-recipes/' },\n  { anchor:'delicious dessert recipes',   url:'https://texasdadcooks.com/category/desserts-sweets/' },\n  { anchor:'easy lunch ideas',            url:'https://texasdadcooks.com/category/lunch-ideas/' },\n  { anchor:'cooking tips and guides',     url:'https://texasdadcooks.com/category/cooking-tips-guides/' },\n  { anchor:'drinks and beverages',        url:'https://texasdadcooks.com/category/beverages-drinks/' },\n  { anchor:'snacks and appetizers',       url:'https://texasdadcooks.com/category/snacks-appetizers/' },\n  { anchor:'dinner recipe collection',    url:'https://texasdadcooks.com/category/dinner-recipes/' }\n];\nconst internals = ALL_INTERNAL.map((l,i)=>({l,k:(seed*19+i*13)%100})).sort((a,b)=>a.k-b.k).map(x=>x.l).slice(0,2);\n\nlet html = d.articleHTML || '';\n\n// Strip leaked WIKI_TOPIC metadata and Wikipedia/Wikimedia mentions\nhtml = html.replace(/^\\s*WIKI_TOPIC:.*$/gm, '').trim();\nhtml = html.replace(/\\([^)]*(?:Wikipedia|Wikimedia)[^)]*\\)/gi, '');\nhtml = html.replace(/,?\\s*as (?:detailed|described|documented|noted|referenced|mentioned) (?:on|in|by|at|via) (?:Wikipedia|Wikimedia)[^.,;)]*[.,;)]?/gi, '');\nhtml = html.replace(/,?\\s*according to (?:Wikipedia|Wikimedia)[^.,;)]*[.,;)]?/gi, '');\n\nif (!html || html.length < 200) {\n  html = `<p>We are preparing amazing recipe content on <strong>${articleTopic}</strong>. Check back soon on texasdadcooks.com.</p>\n<h2>Why You Will Love This Recipe</h2>\n<p>Great recipes make cooking fun and rewarding.</p>\n<h2>Explore Our Recipe Library</h2>\n<p>Browse more recipes on texasdadcooks.com.</p>`;\n}\n\nconst h2Regex = /(<h2[^>]*>[\\s\\S]*?<\\/h2>)/gi;\nconst parts = html.split(h2Regex);\nlet result = '', h2Count = 0, outboundUsed = 0, internalUsed = 0, imgInserted = 0;\nlet img1Placed = false, img2Placed = false, img3Placed = false;\n\nfor (let i = 0; i < parts.length; i++) {\n  const part = parts[i];\n  if (/<h2/i.test(part)) {\n    h2Count++;\n    const withId = !/id=\"/i.test(part) ? part.replace(/<h2/i, `<h2 id=\"sec-${h2Count}\"`) : part;\n    result += withId;\n  } else {\n    let content = part;\n    // Image 1 after first section\n    if (h2Count === 1 && !img1Placed && content.trim().length > 50) {\n      const imgBlock = makeImgBlock(img1, result.match(/<h2[^>]*>([\\s\\S]*?)<\\/h2>$/i)?.[1].replace(/<[^>]*>/g,'') || articleTopic);\n      if (imgBlock) { content += '\\n' + imgBlock; img1Placed = true; imgInserted++; }\n    }\n    const prevH2 = parts[i - 1] || '';\n    // Image 2 after Ingredients section\n    if (prevH2.toLowerCase().includes('ingredient') && !img2Placed) {\n      const imgBlock = makeImgBlock(img2, 'Ingredients for ' + articleTopic);\n      if (imgBlock) { content += '\\n' + imgBlock; img2Placed = true; imgInserted++; }\n    }\n    // Image 3 after Instructions/Steps section\n    if ((prevH2.toLowerCase().includes('instruction') || prevH2.toLowerCase().includes('step')) && !img3Placed) {\n      const imgBlock = makeImgBlock(img3, 'How to make ' + articleTopic);\n      if (imgBlock) { content += '\\n' + imgBlock; img3Placed = true; imgInserted++; }\n    }\n\n    // MAX 2 outbound links — ONLY research/scientific sources\n    if (outboundUsed < 2 && h2Count >= 2 && content.includes('</p>')) {\n      const src = sources[outboundUsed];\n      if (src) {\n        // Insert into nutrition or science sections only\n        const sectionRelevant = prevH2.toLowerCase().includes('nutri') || prevH2.toLowerCase().includes('science') || prevH2.toLowerCase().includes('health') || prevH2.toLowerCase().includes('tip') || h2Count === 3;\n        if (sectionRelevant) {\n          let cnt = 0;\n          content = content.replace(/<\\/p>/gi, m => { cnt++; if (cnt === 1) return `</p>\\n<p style=\"font-size:13px;color:#555;font-style:italic;border-left:3px solid #e5e7eb;padding-left:12px;margin:10px 0 14px;\">According to <a href=\"${src.url}\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"color:#6b7280;\">${src.name}</a>, ${src.context} plays an important role in understanding food preparation and nutrition.</p>`; return m; });\n          outboundUsed++;\n        }\n      }\n    }\n    // MAX 2 internal links\n    if (internalUsed < 2 && h2Count > 0 && (h2Count === 4 || h2Count === 6) && content.includes('</p>')) {\n      const link = internals[Math.min(internalUsed, internals.length - 1)];\n      if (link) {\n        const lastClose = content.lastIndexOf('</p>');\n        if (lastClose !== -1) { content = content.slice(0, lastClose) + ` For more delicious ideas, explore our <a href=\"${link.url}\" style=\"color:#d97706;\">${link.anchor}</a> collection.` + content.slice(lastClose); internalUsed++; }\n      }\n    }\n    result += content;\n  }\n}\n\n// Table of Contents\nconst allH2Tags = result.match(/<h2[^>]*>([\\s\\S]*?)<\\/h2>/gi) || [];\nlet toc = `<div style=\"background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:16px 22px;margin:0 0 28px;\">\\n<p style=\"font-weight:700;font-size:15px;margin:0 0 10px;color:#78350f;\">🍳 In This Article</p>\\n<ul style=\"margin:0;padding-left:18px;line-height:1.9;\">`;\nallH2Tags.forEach((tag, idx) => {\n  const text = tag.replace(/<[^>]*>/g,'').trim();\n  const idM = tag.match(/id=\"([^\"]+)\"/);\n  const id = idM ? idM[1] : 'sec-' + (idx + 1);\n  if (!text.toLowerCase().includes('in this article') && text.length > 2) toc += `\\n  <li><a href=\"#${id}\" style=\"color:#d97706;text-decoration:none;font-size:14px;\">${text}</a></li>`;\n});\ntoc += '\\n</ul>\\n</div>\\n';\nresult = result.replace(/<div[^>]*>[\\s\\S]{0,50}In This Article[\\s\\S]*?<\\/ul>[\\s\\S]*?<\\/div>/i, '');\n\nconst cta = includeCTA\n  ? `\\n<div style=\"background:#fffbeb;border:2px solid #f59e0b;border-radius:10px;padding:20px 24px;margin:32px 0;text-align:center;\">\\n<p style=\"margin:0 0 8px;font-size:15px;font-weight:600;color:#78350f;\">Hungry for more recipes?</p>\\n<p style=\"margin:0 0 14px;font-size:14px;color:#374151;\">Browse our full collection of easy, delicious recipes on texasdadcooks.com.</p>\\n<a href=\"https://texasdadcooks.com/category/quick-easy-recipes/\" style=\"display:inline-block;background:#d97706;color:#fff;padding:10px 24px;border-radius:6px;text-decoration:none;font-weight:600;font-size:14px;\">Browse All Recipes →</a>\\n</div>\\n`\n  : '';\n\nconst disclaimer = `<div style=\"background:#f8fafc;border-left:4px solid #94a3b8;padding:14px 18px;margin-top:36px;border-radius:0 6px 6px 0;font-size:12px;color:#64748b;line-height:1.7;\">\\n<strong>Recipe Disclaimer:</strong> Nutritional information is approximate and for guidance only. Cooking times may vary depending on your equipment and ingredient brands. Always use your judgment when handling hot surfaces and sharp utensils. Images used in this article are sourced from <a href=\"https://www.pexels.com\" target=\"_blank\" rel=\"noopener\">Pexels</a> and <a href=\"https://commons.wikimedia.org\" target=\"_blank\" rel=\"noopener\">Wikimedia Commons</a> under their respective free-use licenses. &copy; texasdadcooks.com — All rights reserved.\\n</div>`;\n\nconst finalHTML = toc + result + cta + disclaimer;\nreturn [{ json: { ...d, articleHTML: finalHTML, _imgInserted: imgInserted, _outboundLinks: outboundUsed, _internalLinks: internalUsed, _finalLength: finalHTML.length, _img1: !!(img1 && img1.url), _img2: !!(img2 && img2.url), _img3: !!(img3 && img3.url) } }];"
+        "jsCode": "// CRITICAL: Get article data from source nodes, NOT from $input\n// $input only has Pixabay photo data (Merge Images strips article data)\nlet d;\ntry {\n  const ext = $('Extract & Store HTML').first().json;\n  if (ext && (ext.title || ext.trendingTopic)) { d = ext; }\n  else { throw new Error('no data'); }\n} catch(e1) {\n  try { d = $('Error Handler (Gemini)').first().json; }\n  catch(e2) { d = $input.first().json; }\n}\nconst includeCTA = d.includeCTA || false;\nconst articleTopic = d.trendingTopic || d.title || 'cooking';\n\nconst usedImgIds = new Set();\n\nfunction pickBestImage(nodeName) {\n  try {\n    const apiResponse = $(nodeName).first().json;\n    const photos = (apiResponse && apiResponse.hits) ? apiResponse.hits : [];\n    if (photos.length === 0) return null;\n    const available = photos.filter(p => !usedImgIds.has(p.id));\n    if (available.length === 0) return null;\n    const pick = available[Math.floor(Math.random() * Math.min(4, available.length))];\n    if (!pick) return null;\n    usedImgIds.add(pick.id);\n    return {\n      url:   pick.largeImageURL || pick.webformatURL || pick.previewURL || '',\n      alt:   pick.tags || '',\n      pName: pick.user || 'Pixabay',\n      pUrl:  'https://pixabay.com/users/' + (pick.user || 'pixabay') + '-' + (pick.user_id || ''),\n      pgUrl: pick.pageURL || 'https://pixabay.com',\n      source: 'pixabay'\n    };\n  } catch(e) { return null; }\n}\n\nconst img1 = pickBestImage('Fetch Inline Image 1 (Pixabay)');\nconst img2 = pickBestImage('Fetch Inline Image 2 (Pixabay)');\nconst img3 = pickBestImage('Fetch Inline Image 3 (Pixabay)');\n\n// Build image block with FULL copyright attribution\nfunction makeImgBlock(img, headingText) {\n  if (!img || !img.url) return '';\n  const alt = ((headingText || img.alt || articleTopic) + ' — texasdadcooks.com').replace(/\"/g,\"'\").substring(0,120);\n  let credit = '';\n  if (img.source === 'pixabay') {\n    credit = img.pName\n      ? `<p style=\"font-size:11px;color:#888;text-align:center;margin:5px 0 0;font-style:italic;\">📷 Photo by <a href=\"${img.pUrl}\" target=\"_blank\" rel=\"noopener\">${img.pName}</a> on <a href=\"${img.pgUrl}\" target=\"_blank\" rel=\"noopener\">Pixabay</a> — Free to use under the <a href=\"https://pixabay.com/service/license-summary/\" target=\"_blank\" rel=\"noopener\">Pixabay License</a></p>`\n      : '';\n  } else if (img.source === 'wikimedia') {\n    credit = `<p style=\"font-size:11px;color:#888;text-align:center;margin:5px 0 0;font-style:italic;\">📷 Image: <a href=\"${img.pgUrl}\" target=\"_blank\" rel=\"noopener\">${img.pName}</a> via <a href=\"https://commons.wikimedia.org\" target=\"_blank\" rel=\"noopener\">Wikimedia Commons</a> — Licensed under <a href=\"${img.licenseUrl || 'https://creativecommons.org/licenses/by-sa/4.0/'}\" target=\"_blank\" rel=\"noopener\">${img.licenseName || 'CC BY-SA 4.0'}</a></p>`;\n  }\n  return `<figure style=\"margin:24px 0 32px;text-align:center;\">\n<img src=\"${img.url}\" alt=\"${alt}\" width=\"800\" height=\"450\" style=\"width:100%;max-width:760px;height:auto;border-radius:10px;display:block;margin:0 auto;\" loading=\"lazy\"/>\n<figcaption>${credit}</figcaption>\n</figure>`;\n}\n\n// AUTHORITATIVE SCIENCE/RESEARCH SOURCES ONLY — no recipe blogs\nconst ALL_SOURCES = [\n  { name: 'USDA FoodData Central', url: 'https://fdc.nal.usda.gov/', context: 'nutritional data and food composition' },\n  { name: 'Harvard T.H. Chan School of Public Health', url: 'https://www.hsph.harvard.edu/nutritionsource/', context: 'evidence-based nutrition research' },\n  { name: 'World Health Organization (WHO)', url: 'https://www.who.int/news-room/fact-sheets/detail/healthy-diet', context: 'dietary guidelines and healthy eating' },\n  { name: 'National Institutes of Health (NIH)', url: 'https://ods.od.nih.gov/', context: 'vitamin and mineral research' },\n  { name: 'American Heart Association', url: 'https://www.heart.org/en/healthy-living/healthy-eating', context: 'heart-healthy cooking guidance' },\n  { name: 'Mayo Clinic', url: 'https://www.mayoclinic.org/healthy-lifestyle/nutrition-and-healthy-eating', context: 'nutrition science and health' },\n  { name: 'PubMed Central', url: 'https://www.ncbi.nlm.nih.gov/pmc/', context: 'peer-reviewed food science studies' }\n];\nconst seed = (d.slug || 'recipe').split('').reduce((a,c)=>a+c.charCodeAt(0),0);\n// Only 2 outbound links max — to research/science sources\nconst sources = ALL_SOURCES.map((s,i)=>({s,k:(seed*31+i*17)%100})).sort((a,b)=>a.k-b.k).map(x=>x.s).slice(0,2);\n\n// Only 2 internal links max\nconst ALL_INTERNAL = [\n  { anchor:'quick and easy recipes',      url:'https://texasdadcooks.com/category/quick-easy-recipes/' },\n  { anchor:'breakfast recipe ideas',      url:'https://texasdadcooks.com/category/breakfast-recipes/' },\n  { anchor:'healthy dinner recipes',      url:'https://texasdadcooks.com/category/healthy-recipes/' },\n  { anchor:'vegetarian meal ideas',       url:'https://texasdadcooks.com/category/vegetarian-recipes/' },\n  { anchor:'delicious dessert recipes',   url:'https://texasdadcooks.com/category/desserts-sweets/' },\n  { anchor:'easy lunch ideas',            url:'https://texasdadcooks.com/category/lunch-ideas/' },\n  { anchor:'cooking tips and guides',     url:'https://texasdadcooks.com/category/cooking-tips-guides/' },\n  { anchor:'drinks and beverages',        url:'https://texasdadcooks.com/category/beverages-drinks/' },\n  { anchor:'snacks and appetizers',       url:'https://texasdadcooks.com/category/snacks-appetizers/' },\n  { anchor:'dinner recipe collection',    url:'https://texasdadcooks.com/category/dinner-recipes/' }\n];\nconst internals = ALL_INTERNAL.map((l,i)=>({l,k:(seed*19+i*13)%100})).sort((a,b)=>a.k-b.k).map(x=>x.l).slice(0,2);\n\nlet html = d.articleHTML || '';\n\n// Strip leaked WIKI_TOPIC metadata and Wikipedia/Wikimedia mentions\nhtml = html.replace(/^\\s*WIKI_TOPIC:.*$/gm, '').trim();\nhtml = html.replace(/\\([^)]*(?:Wikipedia|Wikimedia)[^)]*\\)/gi, '');\nhtml = html.replace(/,?\\s*as (?:detailed|described|documented|noted|referenced|mentioned) (?:on|in|by|at|via) (?:Wikipedia|Wikimedia)[^.,;)]*[.,;)]?/gi, '');\nhtml = html.replace(/,?\\s*according to (?:Wikipedia|Wikimedia)[^.,;)]*[.,;)]?/gi, '');\n\nif (!html || html.length < 200) {\n  html = `<p>We are preparing amazing recipe content on <strong>${articleTopic}</strong>. Check back soon on texasdadcooks.com.</p>\n<h2>Why You Will Love This Recipe</h2>\n<p>Great recipes make cooking fun and rewarding.</p>\n<h2>Explore Our Recipe Library</h2>\n<p>Browse more recipes on texasdadcooks.com.</p>`;\n}\n\nconst h2Regex = /(<h2[^>]*>[\\s\\S]*?<\\/h2>)/gi;\nconst parts = html.split(h2Regex);\nlet result = '', h2Count = 0, outboundUsed = 0, internalUsed = 0, imgInserted = 0;\nlet img1Placed = false, img2Placed = false, img3Placed = false;\n\nfor (let i = 0; i < parts.length; i++) {\n  const part = parts[i];\n  if (/<h2/i.test(part)) {\n    h2Count++;\n    const withId = !/id=\"/i.test(part) ? part.replace(/<h2/i, `<h2 id=\"sec-${h2Count}\"`) : part;\n    result += withId;\n  } else {\n    let content = part;\n    // Image 1 after first section\n    if (h2Count === 1 && !img1Placed && content.trim().length > 50) {\n      const imgBlock = makeImgBlock(img1, result.match(/<h2[^>]*>([\\s\\S]*?)<\\/h2>$/i)?.[1].replace(/<[^>]*>/g,'') || articleTopic);\n      if (imgBlock) { content += '\\n' + imgBlock; img1Placed = true; imgInserted++; }\n    }\n    const prevH2 = parts[i - 1] || '';\n    // Image 2 after Ingredients section\n    if (prevH2.toLowerCase().includes('ingredient') && !img2Placed) {\n      const imgBlock = makeImgBlock(img2, 'Ingredients for ' + articleTopic);\n      if (imgBlock) { content += '\\n' + imgBlock; img2Placed = true; imgInserted++; }\n    }\n    // Image 3 after Instructions/Steps section\n    if ((prevH2.toLowerCase().includes('instruction') || prevH2.toLowerCase().includes('step')) && !img3Placed) {\n      const imgBlock = makeImgBlock(img3, 'How to make ' + articleTopic);\n      if (imgBlock) { content += '\\n' + imgBlock; img3Placed = true; imgInserted++; }\n    }\n\n    // MAX 2 outbound links — ONLY research/scientific sources\n    if (outboundUsed < 2 && h2Count >= 2 && content.includes('</p>')) {\n      const src = sources[outboundUsed];\n      if (src) {\n        // Insert into nutrition or science sections only\n        const sectionRelevant = prevH2.toLowerCase().includes('nutri') || prevH2.toLowerCase().includes('science') || prevH2.toLowerCase().includes('health') || prevH2.toLowerCase().includes('tip') || h2Count === 3;\n        if (sectionRelevant) {\n          let cnt = 0;\n          content = content.replace(/<\\/p>/gi, m => { cnt++; if (cnt === 1) return `</p>\\n<p style=\"font-size:13px;color:#555;font-style:italic;border-left:3px solid #e5e7eb;padding-left:12px;margin:10px 0 14px;\">According to <a href=\"${src.url}\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"color:#6b7280;\">${src.name}</a>, ${src.context} plays an important role in understanding food preparation and nutrition.</p>`; return m; });\n          outboundUsed++;\n        }\n      }\n    }\n    // MAX 2 internal links\n    if (internalUsed < 2 && h2Count > 0 && (h2Count === 4 || h2Count === 6) && content.includes('</p>')) {\n      const link = internals[Math.min(internalUsed, internals.length - 1)];\n      if (link) {\n        const lastClose = content.lastIndexOf('</p>');\n        if (lastClose !== -1) { content = content.slice(0, lastClose) + ` For more delicious ideas, explore our <a href=\"${link.url}\" style=\"color:#d97706;\">${link.anchor}</a> collection.` + content.slice(lastClose); internalUsed++; }\n      }\n    }\n    result += content;\n  }\n}\n\n// Table of Contents\nconst allH2Tags = result.match(/<h2[^>]*>([\\s\\S]*?)<\\/h2>/gi) || [];\nlet toc = `<div style=\"background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:16px 22px;margin:0 0 28px;\">\\n<p style=\"font-weight:700;font-size:15px;margin:0 0 10px;color:#78350f;\">🍳 In This Article</p>\\n<ul style=\"margin:0;padding-left:18px;line-height:1.9;\">`;\nallH2Tags.forEach((tag, idx) => {\n  const text = tag.replace(/<[^>]*>/g,'').trim();\n  const idM = tag.match(/id=\"([^\"]+)\"/);\n  const id = idM ? idM[1] : 'sec-' + (idx + 1);\n  if (!text.toLowerCase().includes('in this article') && text.length > 2) toc += `\\n  <li><a href=\"#${id}\" style=\"color:#d97706;text-decoration:none;font-size:14px;\">${text}</a></li>`;\n});\ntoc += '\\n</ul>\\n</div>\\n';\nresult = result.replace(/<div[^>]*>[\\s\\S]{0,50}In This Article[\\s\\S]*?<\\/ul>[\\s\\S]*?<\\/div>/i, '');\n\nconst cta = includeCTA\n  ? `\\n<div style=\"background:#fffbeb;border:2px solid #f59e0b;border-radius:10px;padding:20px 24px;margin:32px 0;text-align:center;\">\\n<p style=\"margin:0 0 8px;font-size:15px;font-weight:600;color:#78350f;\">Hungry for more recipes?</p>\\n<p style=\"margin:0 0 14px;font-size:14px;color:#374151;\">Browse our full collection of easy, delicious recipes on texasdadcooks.com.</p>\\n<a href=\"https://texasdadcooks.com/category/quick-easy-recipes/\" style=\"display:inline-block;background:#d97706;color:#fff;padding:10px 24px;border-radius:6px;text-decoration:none;font-weight:600;font-size:14px;\">Browse All Recipes →</a>\\n</div>\\n`\n  : '';\n\nconst disclaimer = `<div style=\"background:#f8fafc;border-left:4px solid #94a3b8;padding:14px 18px;margin-top:36px;border-radius:0 6px 6px 0;font-size:12px;color:#64748b;line-height:1.7;\">\\n<strong>Recipe Disclaimer:</strong> Nutritional information is approximate and for guidance only. Cooking times may vary depending on your equipment and ingredient brands. Always use your judgment when handling hot surfaces and sharp utensils. Images used in this article are sourced from <a href=\"https://pixabay.com\" target=\"_blank\" rel=\"noopener\">Pixabay</a> under the free Pixabay License. &copy; texasdadcooks.com — All rights reserved.\\n</div>`;\n\nconst finalHTML = toc + result + cta + disclaimer;\nreturn [{ json: { ...d, articleHTML: finalHTML, _imgInserted: imgInserted, _outboundLinks: outboundUsed, _internalLinks: internalUsed, _finalLength: finalHTML.length, _img1: !!(img1 && img1.url), _img2: !!(img2 && img2.url), _img3: !!(img3 && img3.url) } }];"
       },
       "id": "c98f2793-d78d-4a07-bc1b-58c2714fe57b",
       "name": "Enhance Article",
@@ -364,20 +340,12 @@
     },
     {
       "parameters": {
-        "url": "={{ 'https://api.pexels.com/v1/search?query=' + encodeURIComponent(($json.imageKeywords && $json.imageKeywords.length > 0) ? $json.imageKeywords[0] : ($json.title + ' food recipe')) + '&per_page=10&orientation=landscape' }}",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Authorization",
-              "value": "={{ $('Build Config').item.json._pixabayKey }}"
-            }
-          ]
-        },
+        "url": "={{ 'https://pixabay.com/api/?key=' + $('Build Config').item.json._pixabayKey + '&q=' + encodeURIComponent(($json.imageKeywords && $json.imageKeywords.length > 0) ? $json.imageKeywords[0] : ($json.title + ' food recipe')) + '&per_page=10&image_type=photo&orientation=horizontal' }}",
+        "sendHeaders": false,
         "options": {}
       },
       "id": "3e6e66d4-d358-4ece-982b-ff878fa88066",
-      "name": "Fetch Featured Image (Pexels)",
+      "name": "Fetch Featured Image (Pixabay)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
@@ -387,7 +355,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const STATIC_USED_IMAGES_KEY = 'usedPexelsImageIds';\nconst photos = $json.photos || [];\nconst artData = $('Parse & Validate Article').first().json;\nlet usedImgMap = {};\ntry { usedImgMap = JSON.parse($getWorkflowStaticData('global')[STATIC_USED_IMAGES_KEY] || '{}'); } catch(e) {}\nconst today = new Date().toISOString().slice(0,10);\nconst cutoff = new Date(); cutoff.setDate(cutoff.getDate()-30);\nObject.keys(usedImgMap).forEach(d => { if (d < cutoff.toISOString().slice(0,10)) delete usedImgMap[d]; });\nconst allUsedIds = Object.values(usedImgMap).flat();\nlet freshPhotos = photos.filter(r => r.id && !allUsedIds.includes(String(r.id)));\nif (freshPhotos.length === 0) freshPhotos = photos;\nconst selected = freshPhotos.length > 0 ? freshPhotos[Math.floor(Math.random() * Math.min(5, freshPhotos.length))] : null;\nlet imgUrl, imgId, photographerName, photographerUrl, pexelsPageUrl;\nif (selected) {\n  imgUrl = selected.src?.large2x || selected.src?.large || selected.src?.medium || 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg';\n  imgId = String(selected.id);\n  photographerName = selected.photographer || 'Pexels Photographer';\n  photographerUrl = selected.photographer_url || 'https://www.pexels.com';\n  pexelsPageUrl = selected.url || 'https://www.pexels.com';\n} else {\n  imgUrl = 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg';\n  imgId = 'fallback_default';\n  photographerName = 'Pexels';\n  photographerUrl = 'https://www.pexels.com';\n  pexelsPageUrl = 'https://www.pexels.com';\n}\nif (!usedImgMap[today]) usedImgMap[today] = [];\nif (!usedImgMap[today].includes(imgId)) usedImgMap[today].push(imgId);\n$getWorkflowStaticData('global')[STATIC_USED_IMAGES_KEY] = JSON.stringify(usedImgMap);\nreturn [{ json: { ...artData, _imageUrl: imgUrl, _imageAlt: artData.title || '', _imageId: imgId, _photographerName: photographerName, _photographerUrl: photographerUrl, _pexelsPageUrl: pexelsPageUrl } }];"
+        "jsCode": "const STATIC_USED_IMAGES_KEY = 'usedPixabayImageIds';\nconst hits = $json.hits || [];\nconst artData = $('Parse & Validate Article').first().json;\nlet usedImgMap = {};\ntry { usedImgMap = JSON.parse($getWorkflowStaticData('global')[STATIC_USED_IMAGES_KEY] || '{}'); } catch(e) {}\nconst today = new Date().toISOString().slice(0,10);\nconst cutoff = new Date(); cutoff.setDate(cutoff.getDate()-30);\nObject.keys(usedImgMap).forEach(d => { if (d < cutoff.toISOString().slice(0,10)) delete usedImgMap[d]; });\nconst allUsedIds = Object.values(usedImgMap).flat();\nlet freshPhotos = hits.filter(r => r.id && !allUsedIds.includes(String(r.id)));\nif (freshPhotos.length === 0) freshPhotos = hits;\nconst selected = freshPhotos.length > 0 ? freshPhotos[Math.floor(Math.random() * Math.min(5, freshPhotos.length))] : null;\nlet imgUrl, imgId, photographerName, photographerUrl, pixabayPageUrl;\nif (selected) {\n  imgUrl = selected.largeImageURL || selected.webformatURL || 'https://pixabay.com/static/img/public/medium_rectangle_b-dccc41a4.png';\n  imgId = String(selected.id);\n  photographerName = selected.user || 'Pixabay';\n  photographerUrl = 'https://pixabay.com/users/' + (selected.user || 'pixabay') + '-' + (selected.user_id || '');\n  pixabayPageUrl = selected.pageURL || 'https://pixabay.com';\n} else {\n  imgUrl = 'https://pixabay.com/static/img/public/medium_rectangle_b-dccc41a4.png';\n  imgId = 'fallback_default';\n  photographerName = 'Pixabay';\n  photographerUrl = 'https://pixabay.com';\n  pixabayPageUrl = 'https://pixabay.com';\n}\nif (!usedImgMap[today]) usedImgMap[today] = [];\nif (!usedImgMap[today].includes(imgId)) usedImgMap[today].push(imgId);\n$getWorkflowStaticData('global')[STATIC_USED_IMAGES_KEY] = JSON.stringify(usedImgMap);\nreturn [{ json: { ...artData, _imageUrl: imgUrl, _imageAlt: artData.title || '', _imageId: imgId, _photographerName: photographerName, _photographerUrl: photographerUrl, _pixabayPageUrl: pixabayPageUrl } }];"
       },
       "id": "6ed8fc57-7d3c-43a8-8329-97a0d1a57fd1",
       "name": "Build Image URL",
@@ -457,7 +425,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const mediaResp = $json;\nconst artData = $('Parse & Validate Article').first().json;\nconst mediaId = mediaResp.id || 0;\nconst sourceUrl = mediaResp.source_url || '';\nlet finalHTML = artData.articleHTML || '';\nconst photographerName = $('Build Image URL').first().json._photographerName || 'Pexels Photographer';\nconst photographerUrl = $('Build Image URL').first().json._photographerUrl || 'https://www.pexels.com';\nconst pexelsPageUrl = $('Build Image URL').first().json._pexelsPageUrl || 'https://www.pexels.com';\nconst altText = (artData.title || 'Recipe Article').replace(/\"/g, '');\nif (mediaId && sourceUrl) {\n  const imgBlock = `<figure class=\"wp-block-image size-large\" style=\"margin-bottom:28px;\">\\n<img src=\"${sourceUrl}\" alt=\"${altText}\" style=\"width:100%;border-radius:10px;\"/>\\n<figcaption style=\"font-size:11px;color:#888;text-align:center;margin-top:6px;\">📷 Photo by <a href=\"${photographerUrl}\" target=\"_blank\" rel=\"noopener\">${photographerName}</a> on <a href=\"${pexelsPageUrl}\" target=\"_blank\" rel=\"noopener\">Pexels</a> — Free to use under the <a href=\"https://www.pexels.com/license/\" target=\"_blank\" rel=\"noopener\">Pexels License</a></figcaption>\\n</figure>\\n`;\n  finalHTML = imgBlock + finalHTML;\n}\nreturn [{ json: { ...artData, _mediaId: mediaId, articleHTML: finalHTML } }];"
+        "jsCode": "const mediaResp = $json;\nconst artData = $('Parse & Validate Article').first().json;\nconst mediaId = mediaResp.id || 0;\nconst sourceUrl = mediaResp.source_url || '';\nlet finalHTML = artData.articleHTML || '';\nconst photographerName = $('Build Image URL').first().json._photographerName || 'Pixabay';\nconst photographerUrl = $('Build Image URL').first().json._photographerUrl || 'https://pixabay.com';\nconst pixabayPageUrl = $('Build Image URL').first().json._pixabayPageUrl || 'https://pixabay.com';\nconst altText = (artData.title || 'Recipe Article').replace(/\"/g, '');\nif (mediaId && sourceUrl) {\n  const imgBlock = `<figure class=\"wp-block-image size-large\" style=\"margin-bottom:28px;\">\\n<img src=\"${sourceUrl}\" alt=\"${altText}\" style=\"width:100%;border-radius:10px;\"/>\\n<figcaption style=\"font-size:11px;color:#888;text-align:center;margin-top:6px;\">📷 Photo by <a href=\"${photographerUrl}\" target=\"_blank\" rel=\"noopener\">${photographerName}</a> on <a href=\"${pixabayPageUrl}\" target=\"_blank\" rel=\"noopener\">Pixabay</a> — Free to use under the <a href=\"https://pixabay.com/service/license-summary/\" target=\"_blank\" rel=\"noopener\">Pixabay License</a></figcaption>\\n</figure>\\n`;\n  finalHTML = imgBlock + finalHTML;\n}\nreturn [{ json: { ...artData, _mediaId: mediaId, articleHTML: finalHTML } }];"
       },
       "id": "dbcef951-0db3-4ded-9332-e8871378b7e9",
       "name": "Map Media ID",
@@ -693,17 +661,17 @@
       "main": [
         [
           {
-            "node": "Fetch Inline Image 1 (Pexels)",
+            "node": "Fetch Inline Image 1 (Pixabay)",
             "type": "main",
             "index": 0
           },
           {
-            "node": "Fetch Inline Image 2 (Pexels)",
+            "node": "Fetch Inline Image 2 (Pixabay)",
             "type": "main",
             "index": 0
           },
           {
-            "node": "Fetch Inline Image 3 (Pexels)",
+            "node": "Fetch Inline Image 3 (Pixabay)",
             "type": "main",
             "index": 0
           }
@@ -714,24 +682,24 @@
       "main": [
         [
           {
-            "node": "Fetch Inline Image 1 (Pexels)",
+            "node": "Fetch Inline Image 1 (Pixabay)",
             "type": "main",
             "index": 0
           },
           {
-            "node": "Fetch Inline Image 2 (Pexels)",
+            "node": "Fetch Inline Image 2 (Pixabay)",
             "type": "main",
             "index": 0
           },
           {
-            "node": "Fetch Inline Image 3 (Pexels)",
+            "node": "Fetch Inline Image 3 (Pixabay)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Fetch Inline Image 1 (Pexels)": {
+    "Fetch Inline Image 1 (Pixabay)": {
       "main": [
         [
           {
@@ -742,7 +710,7 @@
         ]
       ]
     },
-    "Fetch Inline Image 2 (Pexels)": {
+    "Fetch Inline Image 2 (Pixabay)": {
       "main": [
         [
           {
@@ -779,14 +747,14 @@
       "main": [
         [
           {
-            "node": "Fetch Featured Image (Pexels)",
+            "node": "Fetch Featured Image (Pixabay)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Fetch Featured Image (Pexels)": {
+    "Fetch Featured Image (Pixabay)": {
       "main": [
         [
           {
