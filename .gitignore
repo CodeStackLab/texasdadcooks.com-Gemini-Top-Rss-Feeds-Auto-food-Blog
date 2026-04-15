@@ -1,0 +1,14 @@
+# Ignore original workflow files with sensitive keys
+justcookdaily.com*.json
+*.json.tmp
+*.ps1
+exclude.txt
+
+# Only allow the sanitized workflow
+!workflow_sanitized.json
+
+# Standard ignores
+.DS_Store
+node_modules/
+dist/
+.env
