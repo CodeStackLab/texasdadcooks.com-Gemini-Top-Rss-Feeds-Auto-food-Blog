@@ -255,8 +255,18 @@
     },
     {
       "parameters": {
-        "url": "={{ 'https://pixabay.com/api/?key=' + $('Build Config').item.json._pixabayKey + '&q=' + encodeURIComponent($json.imgQuery1) + '&per_page=10&image_type=photo&orientation=horizontal' }}",
+        "url": "https://pixabay.com/api/",
         "sendHeaders": false,
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            { "name": "key", "value": "={{ $('Build Config').item.json._pixabayKey }}" },
+            { "name": "q", "value": "={{ $json.imgQuery1 || 'food recipe' }}" },
+            { "name": "per_page", "value": "10" },
+            { "name": "image_type", "value": "photo" },
+            { "name": "orientation", "value": "horizontal" }
+          ]
+        },
         "options": {}
       },
       "id": "441a120a-22bf-4445-84a8-f2271c1f26bf",
@@ -270,8 +280,18 @@
     },
     {
       "parameters": {
-        "url": "={{ 'https://pixabay.com/api/?key=' + $('Build Config').item.json._pixabayKey + '&q=' + encodeURIComponent($json.imgQuery2) + '&per_page=10&image_type=photo&orientation=horizontal' }}",
+        "url": "https://pixabay.com/api/",
         "sendHeaders": false,
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            { "name": "key", "value": "={{ $('Build Config').item.json._pixabayKey }}" },
+            { "name": "q", "value": "={{ $json.imgQuery2 || 'food ingredients' }}" },
+            { "name": "per_page", "value": "10" },
+            { "name": "image_type", "value": "photo" },
+            { "name": "orientation", "value": "horizontal" }
+          ]
+        },
         "options": {}
       },
       "id": "effe3958-4c7b-4646-b7cc-0957382f6529",
@@ -285,8 +305,18 @@
     },
     {
       "parameters": {
-        "url": "={{ 'https://pixabay.com/api/?key=' + $('Build Config').item.json._pixabayKey + '&q=' + encodeURIComponent($json.imgQuery3) + '&per_page=10&image_type=photo&orientation=horizontal' }}",
+        "url": "https://pixabay.com/api/",
         "sendHeaders": false,
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            { "name": "key", "value": "={{ $('Build Config').item.json._pixabayKey }}" },
+            { "name": "q", "value": "={{ $json.imgQuery3 || 'cooking kitchen' }}" },
+            { "name": "per_page", "value": "10" },
+            { "name": "image_type", "value": "photo" },
+            { "name": "orientation", "value": "horizontal" }
+          ]
+        },
         "options": {}
       },
       "id": "acd8bd6f-38a1-483e-b6d6-0dd6fb97f420",
@@ -340,8 +370,18 @@
     },
     {
       "parameters": {
-        "url": "={{ 'https://pixabay.com/api/?key=' + $('Build Config').item.json._pixabayKey + '&q=' + encodeURIComponent(($json.imageKeywords && $json.imageKeywords.length > 0) ? $json.imageKeywords[0] : ($json.title + ' food recipe')) + '&per_page=10&image_type=photo&orientation=horizontal' }}",
+        "url": "https://pixabay.com/api/",
         "sendHeaders": false,
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            { "name": "key", "value": "={{ $('Build Config').item.json._pixabayKey }}" },
+            { "name": "q", "value": "={{ ($json.imageKeywords && $json.imageKeywords.length > 0) ? $json.imageKeywords[0] : ($json.title + ' food recipe') }}" },
+            { "name": "per_page", "value": "10" },
+            { "name": "image_type", "value": "photo" },
+            { "name": "orientation", "value": "horizontal" }
+          ]
+        },
         "options": {}
       },
       "id": "3e6e66d4-d358-4ece-982b-ff878fa88066",
