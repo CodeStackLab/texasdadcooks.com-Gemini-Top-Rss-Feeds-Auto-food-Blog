@@ -261,7 +261,7 @@
         "queryParameters": {
           "parameters": [
             { "name": "key", "value": "={{ $('Build Config').item.json._pixabayKey }}" },
-            { "name": "q", "value": "={{ $json.imgQuery1 || 'food recipe' }}" },
+            { "name": "q", "value": "={{ ($json.imgQuery1 || 'food recipe').substring(0, 100) }}" },
             { "name": "per_page", "value": "10" },
             { "name": "image_type", "value": "photo" },
             { "name": "orientation", "value": "horizontal" }
@@ -286,7 +286,7 @@
         "queryParameters": {
           "parameters": [
             { "name": "key", "value": "={{ $('Build Config').item.json._pixabayKey }}" },
-            { "name": "q", "value": "={{ $json.imgQuery2 || 'food ingredients' }}" },
+            { "name": "q", "value": "={{ ($json.imgQuery2 || 'food ingredients').substring(0, 100) }}" },
             { "name": "per_page", "value": "10" },
             { "name": "image_type", "value": "photo" },
             { "name": "orientation", "value": "horizontal" }
@@ -311,7 +311,7 @@
         "queryParameters": {
           "parameters": [
             { "name": "key", "value": "={{ $('Build Config').item.json._pixabayKey }}" },
-            { "name": "q", "value": "={{ $json.imgQuery3 || 'cooking kitchen' }}" },
+            { "name": "q", "value": "={{ ($json.imgQuery3 || 'cooking kitchen').substring(0, 100) }}" },
             { "name": "per_page", "value": "10" },
             { "name": "image_type", "value": "photo" },
             { "name": "orientation", "value": "horizontal" }
@@ -357,7 +357,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const d = $json;\nconst validIds = [1,36,39,40,41,42,43,44,45,46];\nconst title = (d.title && d.title.length > 10) ? d.title : (d.trendingTopic ? (d.trendingTopic + ' Complete Recipe Guide') : 'Delicious Homemade Recipe You Must Try');\nconst slug  = (d.slug  && d.slug.length  > 3)  ? d.slug  : title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').substring(0,60);\nconst catId = validIds.includes(Number(d.category_id)) ? Number(d.category_id) : 27;\nconst tags  = (d.tags && Array.isArray(d.tags) && d.tags.length >= 3) ? d.tags : ['recipes','easy cooking','food','homemade','quick meals','kitchen tips'];\nconst meta  = (d.metaDescription && d.metaDescription.length > 30) ? d.metaDescription : `Easy ${title.substring(0,50)} recipe — step-by-step cooking guide on texasdadcooks.com.`;\nconst excpt = (d.excerpt && d.excerpt.length > 20) ? d.excerpt : `Try this amazing ${d.trendingTopic || 'recipe'} from texasdadcooks.com — easy, delicious, and ready in no time!`;\nconst imgKw = d.trendingTopic ? [d.trendingTopic + ' food', d.trendingTopic + ' recipe', 'cooking kitchen fresh'] : ['cooking food recipe','fresh ingredients kitchen','homemade dish plate'];\nreturn [{ json: { ...d, title, slug, category_id: catId, tags, imageKeywords: imgKw, metaDescription: meta, excerpt: excpt } }];"
+        "jsCode": "const d = $json;\nconst validIds = [1,36,39,40,41,42,43,44,45,46];\nconst title = (d.title && d.title.length > 10) ? d.title : (d.trendingTopic ? (d.trendingTopic + ' Complete Recipe Guide') : 'Delicious Homemade Recipe You Must Try');\nconst slug  = (d.slug  && d.slug.length  > 3)  ? d.slug  : title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').substring(0,60);\nconst catId = validIds.includes(Number(d.category_id)) ? Number(d.category_id) : 27;\nconst tags  = (d.tags && Array.isArray(d.tags) && d.tags.length >= 3) ? d.tags : ['recipes','easy cooking','food','homemade','quick meals','kitchen tips'];\nconst meta  = (d.metaDescription && d.metaDescription.length > 30) ? d.metaDescription : `Easy ${title.substring(0,50)} recipe — step-by-step cooking guide on texasdadcooks.com.`;\nconst excpt = (d.excerpt && d.excerpt.length > 20) ? d.excerpt : `Try this amazing ${d.trendingTopic || 'recipe'} from texasdadcooks.com — easy, delicious, and ready in no time!`;\nconst imgKw = (d.trendingTopic ? [d.trendingTopic + ' food', d.trendingTopic + ' recipe', 'cooking kitchen fresh'] : ['cooking food recipe','fresh ingredients kitchen','homemade dish plate']).map(k => k.substring(0, 100));\nreturn [{ json: { ...d, title, slug, category_id: catId, tags, imageKeywords: imgKw, metaDescription: meta, excerpt: excpt } }];"
       },
       "id": "34fb61ac-8896-4866-85d1-920fe4dd3fd0",
       "name": "Parse & Validate Article",
@@ -376,7 +376,7 @@
         "queryParameters": {
           "parameters": [
             { "name": "key", "value": "={{ $('Build Config').item.json._pixabayKey }}" },
-            { "name": "q", "value": "={{ ($json.imageKeywords && $json.imageKeywords.length > 0) ? $json.imageKeywords[0] : ($json.title + ' food recipe') }}" },
+            { "name": "q", "value": "={{ (($json.imageKeywords && $json.imageKeywords.length > 0) ? $json.imageKeywords[0] : ($json.title + ' food recipe')).substring(0, 100) }}" },
             { "name": "per_page", "value": "10" },
             { "name": "image_type", "value": "photo" },
             { "name": "orientation", "value": "horizontal" }
