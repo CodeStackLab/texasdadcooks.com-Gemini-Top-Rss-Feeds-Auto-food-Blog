@@ -277,7 +277,7 @@
       "position": [12064, -1232]
     },
     {
-      "parameters": { "mode": "passThrough", "output": "input1" },
+      "parameters": { "mode": "append" },
       "id": "ec40de91-f5d5-45fa-a503-8cb2ff291573",
       "name": "Merge Images",
       "type": "n8n-nodes-base.merge",
