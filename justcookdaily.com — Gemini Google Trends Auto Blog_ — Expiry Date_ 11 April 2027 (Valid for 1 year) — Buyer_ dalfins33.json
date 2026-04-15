@@ -42,7 +42,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// ============================================\n// CATEGORY-AWARE RSS FEEDS — v6 Round-Robin\n// Each category has its own relevant RSS feeds\n// ============================================\nconst CATEGORY_FEEDS = {\n  1: [ // Quick & Easy Recipes\n    'https://damndelicious.net/feed/',\n    'https://www.budgetbytes.com/feed/',\n    'https://www.spendwithpennies.com/feed/',\n    'https://www.dinneratthezoo.com/feed/',\n    'https://www.showmetheyummy.com/feed/',\n    'https://www.lecremedelacrumb.com/feed/',\n    'https://www.jocooks.com/feed/',\n    'https://www.delish.com/feeds/all/',\n    'https://www.allrecipes.com/recipes/feed/',\n    'https://sweetandsavorymeals.com/feed/'\n  ],\n  39: [ // Breakfast Recipes\n    'https://minimalistbaker.com/feed/',\n    'https://www.loveandlemons.com/feed/',\n    'https://www.inspiredtaste.net/feed/',\n    'https://sallysbakingaddiction.com/feed/',\n    'https://www.foodiecrush.com/feed/',\n    'https://www.twopeasandtheirpod.com/feed/',\n    'https://www.justataste.com/feed/',\n    'https://www.tasteofhome.com/feed/',\n    'https://www.simplyrecipes.com/feed/',\n    'https://iamafoodblog.com/feed/'\n  ],\n  40: [ // Lunch Ideas\n    'https://pinchofyum.com/feed',\n    'https://www.wellplated.com/feed/',\n    'https://cookieandkate.com/feed/',\n    'https://www.acouplecooks.com/feed/',\n    'https://www.themediterraneandish.com/feed/',\n    'https://www.eatwell101.com/feed',\n    'https://diethood.com/feed/',\n    'https://kristineskitchenblog.com/feed/',\n    'https://hostthetoast.com/feed/',\n    'https://www.epicurious.com/feed/rss'\n  ],\n  41: [ // Dinner Recipes\n    'https://natashaskitchen.com/feed/',\n    'https://cafedelites.com/feed/',\n    'https://www.recipetineats.com/feed/',\n    'https://www.gimmesomeoven.com/feed/',\n    'https://www.halfbakedharvest.com/feed/',\n    'https://www.onceuponachef.com/feed',\n    'https://www.seriouseats.com/feed',\n    'https://www.bonappetit.com/feed/rss',\n    'https://www.dinneratthezoo.com/feed/',\n    'https://www.foodnetwork.com/fn-dish/feed'\n  ],\n  42: [ // Healthy Recipes\n    'https://www.skinnytaste.com/feed/',\n    'https://www.loveandlemons.com/feed/',\n    'https://cookieandkate.com/feed/',\n    'https://www.eatwell101.com/feed',\n    'https://www.acouplecooks.com/feed/',\n    'https://www.themediterraneandish.com/feed/',\n    'https://www.101cookbooks.com/feed',\n    'https://www.wellplated.com/feed/',\n    'https://minimalistbaker.com/feed/',\n    'https://www.inspiredtaste.net/feed/'\n  ],\n  43: [ // Vegetarian Recipes\n    'https://minimalistbaker.com/feed/',\n    'https://cookieandkate.com/feed/',\n    'https://www.loveandlemons.com/feed/',\n    'https://www.101cookbooks.com/feed',\n    'https://www.acouplecooks.com/feed/',\n    'https://smittenkitchen.com/feed/',\n    'https://www.themediterraneandish.com/feed/',\n    'https://www.kitchentreaty.com/feed/',\n    'https://food52.com/blog/feed',\n    'https://iamafoodblog.com/feed/'\n  ],\n  44: [ // Desserts & Sweets\n    'https://sallysbakingaddiction.com/feed/',\n    'https://www.browneyedbaker.com/feed/',\n    'https://smittenkitchen.com/feed/',\n    'https://www.halfbakedharvest.com/feed/',\n    'https://www.foodiecrush.com/feed/',\n    'https://www.justataste.com/feed/',\n    'https://www.barefeetinthekitchen.com/feed/',\n    'https://www.number-2-pencil.com/feed/',\n    'https://www.tasteofhome.com/feed/',\n    'https://damndelicious.net/feed/'\n  ],\n  45: [ // Snacks & Appetizers\n    'https://www.showmetheyummy.com/feed/',\n    'https://hostthetoast.com/feed/',\n    'https://damndelicious.net/feed/',\n    'https://www.budgetbytes.com/feed/',\n    'https://www.closetcooking.com/feeds/posts/default?alt=rss',\n    'https://www.delish.com/feeds/all/',\n    'https://sweetandsavorymeals.com/feed/',\n    'https://www.dinneratthezoo.com/feed/',\n    'https://www.tasteofhome.com/feed/',\n    'https://www.allrecipes.com/recipes/feed/'\n  ],\n  46: [ // Beverages & Drinks\n    'https://minimalistbaker.com/feed/',\n    'https://www.loveandlemons.com/feed/',\n    'https://cookieandkate.com/feed/',\n    'https://www.acouplecooks.com/feed/',\n    'https://www.inspiredtaste.net/feed/',\n    'https://food52.com/blog/feed',\n    'https://thekitchn.com/feed',\n    'https://www.simplyrecipes.com/feed/',\n    'https://www.thespruceeats.com/feed',\n    'https://www.epicurious.com/feed/rss'\n  ],\n  36: [ // Cooking Tips & Guides\n    'https://www.seriouseats.com/feed',\n    'https://thekitchn.com/feed',\n    'https://www.thespruceeats.com/feed',\n    'https://www.epicurious.com/feed/rss',\n    'https://food52.com/blog/feed',\n    'https://www.bonappetit.com/feed/rss',\n    'https://www.simplyrecipes.com/feed/',\n    'https://www.tasteofhome.com/feed/',\n    'https://www.onceuponachef.com/feed',\n    'https://www.barefeetinthekitchen.com/feed/'\n  ]\n};\n\n// ============================================\n// ROUND-ROBIN CATEGORY ROTATION\n// Each run picks the NEXT category in order:\n// 27 → 28 → 29 → 30 → 31 → 32 → 33 → 34 → 35 → 36 → 27...\n// ============================================\nconst CATEGORY_ORDER = [1,36,39,40,41,42,43,44,45,46];\nconst ROTATION_KEY = 'categoryRotationIndex';\nconst staticData = $getWorkflowStaticData('global');\nlet rotIdx = 0;\ntry { rotIdx = parseInt(staticData[ROTATION_KEY] || '0'); } catch(e) { rotIdx = 0; }\nif (rotIdx >= CATEGORY_ORDER.length || rotIdx < 0) rotIdx = 0;\nconst currentCategoryId = CATEGORY_ORDER[rotIdx];\n\n// Advance index for NEXT run\nstaticData[ROTATION_KEY] = String((rotIdx + 1) % CATEGORY_ORDER.length);\n\n// Get RSS feeds for this specific category\nconst categoryFeeds = CATEGORY_FEEDS[currentCategoryId] || CATEGORY_FEEDS[1];\nconst shuffled = [...categoryFeeds].sort(() => Math.random() - 0.5);\nlet feedData = '';\nlet feedUrl = '';\nlet errors = [];\n\nfor (let i = 0; i < Math.min(6, shuffled.length); i++) {\n  try {\n    const resp = await $http.get(shuffled[i], {\n      timeout: 12000,\n      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; TexasDadCooks/1.0)' }\n    });\n    const body = typeof resp === 'string' ? resp : (resp.data || resp.body || '');\n    if (body && String(body).length > 300) {\n      feedData = String(body);\n      feedUrl = shuffled[i];\n      break;\n    }\n  } catch(e) {\n    errors.push(shuffled[i].substring(0,40) + ': ' + (e.message || 'failed').substring(0,50));\n  }\n}\n\nreturn [{ json: { data: feedData, feedUrl: feedUrl, _feedErrors: errors, _currentCategoryId: currentCategoryId, _rotationIndex: rotIdx } }];"
+        "jsCode": "// ============================================\n// CATEGORY-AWARE RSS FEEDS — v6 Round-Robin\n// Each category has its own relevant RSS feeds\n// ============================================\nconst CATEGORY_FEEDS = {\n  1: [ // Quick & Easy Recipes\n    'https://damndelicious.net/feed/',\n    'https://www.budgetbytes.com/feed/',\n    'https://www.spendwithpennies.com/feed/',\n    'https://www.dinneratthezoo.com/feed/',\n    'https://www.showmetheyummy.com/feed/',\n    'https://www.lecremedelacrumb.com/feed/',\n    'https://www.jocooks.com/feed/',\n    'https://www.delish.com/feeds/all/',\n    'https://www.allrecipes.com/recipes/feed/',\n    'https://sweetandsavorymeals.com/feed/'\n  ],\n  39: [ // Breakfast Recipes\n    'https://minimalistbaker.com/feed/',\n    'https://www.loveandlemons.com/feed/',\n    'https://www.inspiredtaste.net/feed/',\n    'https://sallysbakingaddiction.com/feed/',\n    'https://www.foodiecrush.com/feed/',\n    'https://www.twopeasandtheirpod.com/feed/',\n    'https://www.justataste.com/feed/',\n    'https://www.tasteofhome.com/feed/',\n    'https://www.simplyrecipes.com/feed/',\n    'https://iamafoodblog.com/feed/'\n  ],\n  40: [ // Lunch Ideas\n    'https://pinchofyum.com/feed',\n    'https://www.wellplated.com/feed/',\n    'https://cookieandkate.com/feed/',\n    'https://www.acouplecooks.com/feed/',\n    'https://www.themediterraneandish.com/feed/',\n    'https://www.eatwell101.com/feed',\n    'https://diethood.com/feed/',\n    'https://kristineskitchenblog.com/feed/',\n    'https://hostthetoast.com/feed/',\n    'https://www.epicurious.com/feed/rss'\n  ],\n  41: [ // Dinner Recipes\n    'https://natashaskitchen.com/feed/',\n    'https://cafedelites.com/feed/',\n    'https://www.recipetineats.com/feed/',\n    'https://www.gimmesomeoven.com/feed/',\n    'https://www.halfbakedharvest.com/feed/',\n    'https://www.onceuponachef.com/feed',\n    'https://www.seriouseats.com/feed',\n    'https://www.bonappetit.com/feed/rss',\n    'https://www.dinneratthezoo.com/feed/',\n    'https://www.foodnetwork.com/fn-dish/feed'\n  ],\n  42: [ // Healthy Recipes\n    'https://www.skinnytaste.com/feed/',\n    'https://www.loveandlemons.com/feed/',\n    'https://cookieandkate.com/feed/',\n    'https://www.eatwell101.com/feed',\n    'https://www.acouplecooks.com/feed/',\n    'https://www.themediterraneandish.com/feed/',\n    'https://www.101cookbooks.com/feed',\n    'https://www.wellplated.com/feed/',\n    'https://minimalistbaker.com/feed/',\n    'https://www.inspiredtaste.net/feed/'\n  ],\n  43: [ // Vegetarian Recipes\n    'https://minimalistbaker.com/feed/',\n    'https://cookieandkate.com/feed/',\n    'https://www.loveandlemons.com/feed/',\n    'https://www.101cookbooks.com/feed',\n    'https://www.acouplecooks.com/feed/',\n    'https://smittenkitchen.com/feed/',\n    'https://www.themediterraneandish.com/feed/',\n    'https://www.kitchentreaty.com/feed/',\n    'https://food52.com/blog/feed',\n    'https://iamafoodblog.com/feed/'\n  ],\n  44: [ // Desserts & Sweets\n    'https://sallysbakingaddiction.com/feed/',\n    'https://www.browneyedbaker.com/feed/',\n    'https://smittenkitchen.com/feed/',\n    'https://www.halfbakedharvest.com/feed/',\n    'https://www.foodiecrush.com/feed/',\n    'https://www.justataste.com/feed/',\n    'https://www.barefeetinthekitchen.com/feed/',\n    'https://www.number-2-pencil.com/feed/',\n    'https://www.tasteofhome.com/feed/',\n    'https://damndelicious.net/feed/'\n  ],\n  45: [ // Snacks & Appetizers\n    'https://www.showmetheyummy.com/feed/',\n    'https://hostthetoast.com/feed/',\n    'https://damndelicious.net/feed/',\n    'https://www.budgetbytes.com/feed/',\n    'https://www.closetcooking.com/feeds/posts/default?alt=rss',\n    'https://www.delish.com/feeds/all/',\n    'https://sweetandsavorymeals.com/feed/',\n    'https://www.dinneratthezoo.com/feed/',\n    'https://www.tasteofhome.com/feed/',\n    'https://www.allrecipes.com/recipes/feed/'\n  ],\n  46: [ // Beverages & Drinks\n    'https://minimalistbaker.com/feed/',\n    'https://www.loveandlemons.com/feed/',\n    'https://cookieandkate.com/feed/',\n    'https://www.acouplecooks.com/feed/',\n    'https://www.inspiredtaste.net/feed/',\n    'https://food52.com/blog/feed',\n    'https://thekitchn.com/feed',\n    'https://www.simplyrecipes.com/feed/',\n    'https://www.thespruceeats.com/feed',\n    'https://www.epicurious.com/feed/rss'\n  ],\n  36: [ // Cooking Tips & Guides\n    'https://www.seriouseats.com/feed',\n    'https://thekitchn.com/feed',\n    'https://www.thespruceeats.com/feed',\n    'https://www.epicurious.com/feed/rss',\n    'https://food52.com/blog/feed',\n    'https://www.bonappetit.com/feed/rss',\n    'https://www.simplyrecipes.com/feed/',\n    'https://www.tasteofhome.com/feed/',\n    'https://www.onceuponachef.com/feed',\n    'https://www.barefeetinthekitchen.com/feed/'\n  ]\n};\n\nconst CATEGORY_ORDER = [1,36,39,40,41,42,43,44,45,46];\nconst ROTATION_KEY = 'categoryRotationIndex';\nconst staticData = $getWorkflowStaticData('global');\nlet rotIdx = 0;\ntry { rotIdx = parseInt(staticData[ROTATION_KEY] || '0'); } catch(e) { rotIdx = 0; }\nif (rotIdx >= CATEGORY_ORDER.length || rotIdx < 0) rotIdx = 0;\nconst currentCategoryId = CATEGORY_ORDER[rotIdx];\n\nstaticData[ROTATION_KEY] = String((rotIdx + 1) % CATEGORY_ORDER.length);\n\nconst categoryFeeds = CATEGORY_FEEDS[currentCategoryId] || CATEGORY_FEEDS[1];\nconst shuffled = [...categoryFeeds].sort(() => Math.random() - 0.5);\nlet feedData = '';\nlet feedUrl = '';\nlet errors = [];\n\nfor (let i = 0; i < Math.min(6, shuffled.length); i++) {\n  try {\n    const resp = await $http.get(shuffled[i], {\n      timeout: 12000,\n      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; TexasDadCooks/1.0)' }\n    });\n    const body = typeof resp === 'string' ? resp : (resp.data || resp.body || '');\n    if (body && String(body).length > 300) {\n      feedData = String(body);\n      feedUrl = shuffled[i];\n      break;\n    }\n  } catch(e) {\n    errors.push(shuffled[i].substring(0,40) + ': ' + (e.message || 'failed').substring(0,50));\n  }\n}\n\nreturn [{ json: { data: feedData, feedUrl: feedUrl, _feedErrors: errors, _currentCategoryId: currentCategoryId, _rotationIndex: rotIdx } }];"
       },
       "id": "b774003f-405c-4ed4-b026-19270a4d3312",
       "name": "Fetch Cooking RSS Feeds",
@@ -55,7 +55,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const STATIC_USED_KEY = 'usedCookingTopics';\nconst STATIC_COUNT_KEY = 'articlePublishCount';\nconst rawXml = $json.data || '';\nconst currentCategoryId = $json._currentCategoryId || 27;\n\n// CATEGORY-SPECIFIC FALLBACK TOPICS — ensures every category gets relevant content\nconst CATEGORY_FALLBACK_POOL = {\n  1: [ // Quick & Easy Recipes\n    { title: 'Crispy Air Fryer Chicken Thighs Ready in 25 Minutes', description: 'Juicy bone-in chicken thighs in the air fryer with garlic herb seasoning.' },\n    { title: 'One Pot Creamy Tuscan Chicken Pasta', description: 'Sun-dried tomatoes, spinach, and parmesan in a garlic cream sauce.' },\n    { title: '15 Minute Garlic Butter Shrimp Stir Fry', description: 'Quick shrimp stir fry with garlic butter sauce and vegetables.' },\n    { title: 'Easy Sheet Pan Fajitas for Busy Weeknights', description: 'Colorful bell peppers, onions, and chicken roasted on one pan.' },\n    { title: 'Quick Teriyaki Salmon with Steamed Rice', description: 'Pan-seared salmon with homemade teriyaki glaze in under 20 minutes.' }\n  ],\n  39: [ // Breakfast Recipes\n    { title: 'Fluffy Japanese Souffle Pancakes from Scratch', description: 'Cloud-like jiggly pancakes with maple syrup and fresh berries.' },\n    { title: 'Overnight Oats Three Delicious Ways', description: 'Blueberry, chocolate, and tropical flavored meal prep breakfasts.' },\n    { title: 'Avocado Toast Five Gourmet Variations', description: 'Elevated avocado toast with poached egg, smoked salmon, and more.' },\n    { title: 'Classic Eggs Benedict with Hollandaise Sauce', description: 'Perfectly poached eggs on English muffins with creamy hollandaise.' },\n    { title: 'Homemade Granola Clusters with Honey and Nuts', description: 'Crunchy oat clusters with almonds, coconut, and dried fruit.' }\n  ],\n  40: [ // Lunch Ideas\n    { title: 'Mediterranean Chickpea Salad with Feta Cheese', description: 'Fresh cucumber, tomato, red onion, and herbs with lemon dressing.' },\n    { title: 'Easy Korean Bibimbap Rice Bowl at Home', description: 'Colorful vegetables, gochujang sauce, and a fried egg on rice.' },\n    { title: 'Grilled Chicken Caesar Wrap with Parmesan', description: 'Classic Caesar salad wrapped in a warm tortilla with grilled chicken.' },\n    { title: 'Thai Peanut Noodle Bowl with Crunchy Veggies', description: 'Rice noodles tossed in spicy peanut sauce with fresh vegetables.' },\n    { title: 'Caprese Panini with Fresh Mozzarella and Basil', description: 'Warm pressed sandwich with tomato, mozzarella, and pesto.' }\n  ],\n  41: [ // Dinner Recipes\n    { title: 'Classic Homemade Beef Lasagna with Béchamel', description: 'Layers of pasta, rich meat sauce, and creamy béchamel.' },\n    { title: 'Perfect Grilled Salmon with Lemon Dill Sauce', description: 'Omega-3 rich salmon fillet grilled to flaky perfection.' },\n    { title: 'Butter Chicken Murgh Makhani Indian Classic', description: 'Tender chicken in creamy spiced tomato and butter sauce.' },\n    { title: 'Slow Cooker Pulled Pork Sandwiches with BBQ', description: 'Fall-apart tender pork shoulder in smoky barbecue sauce.' },\n    { title: 'Stuffed Bell Peppers with Rice and Ground Beef', description: 'Colorful peppers filled with seasoned meat, rice, and melted cheese.' }\n  ],\n  42: [ // Healthy Recipes\n    { title: 'Vegan Buddha Bowl with Tahini Dressing', description: 'Roasted sweet potato, quinoa, avocado, and chickpeas.' },\n    { title: 'Sheet Pan Lemon Herb Roasted Vegetables', description: 'Seasonal veggies roasted with olive oil, garlic, and fresh herbs.' },\n    { title: 'Healthy Acai Bowl with Fresh Toppings', description: 'Thick acai smoothie base with granola, berries, and coconut.' },\n    { title: 'Quinoa Power Salad with Roasted Sweet Potato', description: 'Nutrient-packed quinoa with roasted vegetables and tahini dressing.' },\n    { title: 'Grilled Chicken with Steamed Broccoli and Brown Rice', description: 'Simple clean eating meal with lean protein and whole grains.' }\n  ],\n  43: [ // Vegetarian Recipes\n    { title: 'Creamy Mushroom Risotto with Parmesan', description: 'Italian comfort food with arborio rice and earthy mushrooms.' },\n    { title: 'Crispy Baked Falafel with Tzatziki Sauce', description: 'Golden chickpea patties served with cool cucumber yogurt dip.' },\n    { title: 'Easy Shakshuka Eggs in Tomato Sauce', description: 'North African spiced tomato stew with poached eggs.' },\n    { title: 'Homemade Margherita Pizza with Fresh Basil', description: 'Thin crust pizza with San Marzano tomatoes and fresh mozzarella.' },\n    { title: 'Spinach and Ricotta Stuffed Pasta Shells', description: 'Jumbo pasta shells filled with creamy spinach ricotta mixture.' }\n  ],\n  44: [ // Desserts & Sweets\n    { title: 'Chocolate Lava Cake with Molten Center', description: 'Rich dark chocolate individual cakes with a gooey warm center.' },\n    { title: 'Tres Leches Cake Mexican Milk Cake Recipe', description: 'Sponge cake soaked in three milks topped with whipped cream.' },\n    { title: 'Banana Bread Recipe Moist and Perfect Every Time', description: 'The best classic banana bread with walnuts and cinnamon.' },\n    { title: 'Classic Tiramisu Italian Coffee Dessert', description: 'Ladyfingers soaked in espresso with mascarpone cream layers.' },\n    { title: 'New York Style Cheesecake with Graham Crust', description: 'Dense creamy cheesecake on a buttery graham cracker base.' }\n  ],\n  45: [ // Snacks & Appetizers\n    { title: 'Mexican Street Corn Elote Salad Recipe', description: 'Charred corn with cotija cheese, lime, and chili powder.' },\n    { title: 'Fresh Spring Rolls with Peanut Dipping Sauce', description: 'Vietnamese-style rice paper rolls with shrimp and vegetables.' },\n    { title: 'Crispy Homemade Mozzarella Sticks with Marinara', description: 'Golden breaded mozzarella served with warm tomato dipping sauce.' },\n    { title: 'Loaded Nachos with Guacamole and Salsa Fresca', description: 'Crispy tortilla chips piled with cheese, beans, and fresh toppings.' },\n    { title: 'Bruschetta with Fresh Tomatoes and Garlic', description: 'Toasted bread topped with diced tomatoes, basil, and olive oil.' }\n  ],\n  46: [ // Beverages & Drinks\n    { title: 'Matcha Green Tea Latte Recipe at Home', description: 'Creamy ceremonial grade matcha with frothed oat milk.' },\n    { title: 'Refreshing Homemade Lemonade with Fresh Mint', description: 'Classic fresh-squeezed lemonade with a hint of mint.' },\n    { title: 'Iced Caramel Macchiato Better Than Coffee Shop', description: 'Layered espresso drink with vanilla and caramel drizzle.' },\n    { title: 'Tropical Mango Smoothie Bowl with Coconut', description: 'Thick mango smoothie topped with granola and tropical fruits.' },\n    { title: 'Homemade Chai Tea Latte with Warm Spices', description: 'Aromatic black tea with cinnamon, cardamom, and steamed milk.' }\n  ],\n  36: [ // Cooking Tips & Guides\n    { title: 'Homemade Sourdough Bread Complete Beginners Guide', description: 'Master artisan bread with a crispy crust and soft crumb.' },\n    { title: 'Homemade Fresh Pasta Dough from Scratch Guide', description: 'Simple egg pasta recipe for fettuccine, ravioli, or lasagna sheets.' },\n    { title: 'Knife Skills Every Home Cook Must Master', description: 'Essential cutting techniques for faster or safer food preparation.' },\n    { title: 'How to Season Cast Iron Cookware Perfectly', description: 'Complete guide to building and maintaining a nonstick cast iron surface.' },\n    { title: 'Essential Spice Blends You Can Make at Home', description: 'DIY taco seasoning, curry powder, Italian herb mix, and more.' }\n  ]\n};\n\n// Parse RSS items\nconst itemBlocks = rawXml.match(/<item>([\\s\\S]*?)<\\/item>/g) || [];\nconst articles = itemBlocks.map(item => {\n  let title = '';\n  const cdataTitle = item.match(/<title><!\\[CDATA\\[([^\\]]+)\\]\\]><\\/title>/);\n  const plainTitle = item.match(/<title>([^<]+)<\\/title>/);\n  title = (cdataTitle ? cdataTitle[1] : (plainTitle ? plainTitle[1] : '')).trim();\n  let desc = '';\n  const cdataDesc = item.match(/<description><!\\[CDATA\\[([\\s\\S]*?)\\]\\]><\\/description>/);\n  const plainDesc = item.match(/<description>([\\s\\S]*?)<\\/description>/);\n  desc = (cdataDesc ? cdataDesc[1] : (plainDesc ? plainDesc[1] : '')).replace(/<[^>]*>/g,' ').replace(/&[a-z]+;/gi,' ').replace(/\\s+/g,' ').trim().substring(0,600);\n  let content = '';\n  const encoded = item.match(/<content:encoded><!\\[CDATA\\[([\\s\\S]*?)\\]\\]><\\/content:encoded>/);\n  if (encoded) content = encoded[1].replace(/<[^>]*>/g,' ').replace(/&[a-z]+;/gi,' ').replace(/\\s+/g,' ').trim().substring(0,2000);\n  const linkMatch = item.match(/<link>([^<]+)<\\/link>/);\n  const link = linkMatch ? linkMatch[1].trim() : '';\n  return { title, description: desc, content: content || desc, link };\n}).filter(a => a.title.length > 10);\n\n// Deduplication: 60-day window\nconst today = new Date().toISOString().slice(0,10);\nlet usedMap = {};\ntry { usedMap = JSON.parse($getWorkflowStaticData('global')[STATIC_USED_KEY] || '{}'); } catch(e) {}\nconst cutoff = new Date(); cutoff.setDate(cutoff.getDate()-60);\nObject.keys(usedMap).forEach(d => { if (d < cutoff.toISOString().slice(0,10)) delete usedMap[d]; });\nconst allUsed = Object.values(usedMap).flat();\n\n// Pick fresh article from RSS\nconst fresh = articles.filter(a => !allUsed.includes(a.title));\nlet selected, source;\nif (fresh.length > 0) {\n  selected = fresh[Math.floor(Math.random() * fresh.length)];\n  source = 'rss_feed';\n} else if (articles.length > 0) {\n  selected = articles[Math.floor(Math.random() * articles.length)];\n  source = 'rss_reused';\n} else {\n  // Use CATEGORY-SPECIFIC fallback pool\n  const pool = CATEGORY_FALLBACK_POOL[currentCategoryId] || CATEGORY_FALLBACK_POOL[1];\n  const freshPool = pool.filter(f => !allUsed.includes(f.title));\n  selected = freshPool.length > 0 ? freshPool[Math.floor(Math.random() * freshPool.length)] : pool[Math.floor(Math.random() * pool.length)];\n  source = 'fallback';\n}\n\n// Save used topic\nif (!usedMap[today]) usedMap[today] = [];\nif (!usedMap[today].includes(selected.title)) usedMap[today].push(selected.title);\n$getWorkflowStaticData('global')[STATIC_USED_KEY] = JSON.stringify(usedMap);\n\n// Article counter for CTA\nlet articleCount = 0;\ntry { articleCount = parseInt($getWorkflowStaticData('global')[STATIC_COUNT_KEY] || '0'); } catch(e) {}\narticleCount++;\n$getWorkflowStaticData('global')[STATIC_COUNT_KEY] = String(articleCount);\n\nreturn [{ json: {\n  trendingTopic: selected.title,\n  context: selected.description || '',\n  sourceContent: selected.content || selected.description || '',\n  sourceUrl: selected.link || '',\n  topicSource: source,\n  feedUrl: $json.feedUrl || '',\n  articleCount,\n  includeCTA: (articleCount % 20 === 0),\n  _currentCategoryId: currentCategoryId,\n  _rotationIndex: $json._rotationIndex\n} }];"
+        "jsCode": "const STATIC_USED_KEY = 'usedCookingTopics';\nconst STATIC_COUNT_KEY = 'articlePublishCount';\nconst rawXml = $json.data || '';\nconst currentCategoryId = $json._currentCategoryId || 27;\n\nconst CATEGORY_FALLBACK_POOL = {\n  1: [ // Quick & Easy Recipes\n    { title: 'Crispy Air Fryer Chicken Thighs Ready in 25 Minutes', description: 'Juicy bone-in chicken thighs in the air fryer with garlic herb seasoning.' },\n    { title: 'One Pot Creamy Tuscan Chicken Pasta', description: 'Sun-dried tomatoes, spinach, and parmesan in a garlic cream sauce.' },\n    { title: '15 Minute Garlic Butter Shrimp Stir Fry', description: 'Quick shrimp stir fry with garlic butter sauce and vegetables.' },\n    { title: 'Easy Sheet Pan Fajitas for Busy Weeknights', description: 'Colorful bell peppers, onions, and chicken roasted on one pan.' },\n    { title: 'Quick Teriyaki Salmon with Steamed Rice', description: 'Pan-seared salmon with homemade teriyaki glaze in under 20 minutes.' }\n  ],\n  39: [ // Breakfast Recipes\n    { title: 'Fluffy Japanese Souffle Pancakes from Scratch', description: 'Cloud-like jiggly pancakes with maple syrup and fresh berries.' },\n    { title: 'Overnight Oats Three Delicious Ways', description: 'Blueberry, chocolate, and tropical flavored meal prep breakfasts.' },\n    { title: 'Avocado Toast Five Gourmet Variations', description: 'Elevated avocado toast with poached egg, smoked salmon, and more.' },\n    { title: 'Classic Eggs Benedict with Hollandaise Sauce', description: 'Perfectly poached eggs on English muffins with creamy hollandaise.' },\n    { title: 'Homemade Granola Clusters with Honey and Nuts', description: 'Crunchy oat clusters with almonds, coconut, and dried fruit.' }\n  ],\n  40: [ // Lunch Ideas\n    { title: 'Mediterranean Chickpea Salad with Feta Cheese', description: 'Fresh cucumber, tomato, red onion, and herbs with lemon dressing.' },\n    { title: 'Easy Korean Bibimbap Rice Bowl at Home', description: 'Colorful vegetables, gochujang sauce, and a fried egg on rice.' },\n    { title: 'Grilled Chicken Caesar Wrap with Parmesan', description: 'Classic Caesar salad wrapped in a warm tortilla with grilled chicken.' },\n    { title: 'Thai Peanut Noodle Bowl with Crunchy Veggies', description: 'Rice noodles tossed in spicy peanut sauce with fresh vegetables.' },\n    { title: 'Caprese Panini with Fresh Mozzarella and Basil', description: 'Warm pressed sandwich with tomato, mozzarella, and pesto.' }\n  ],\n  41: [ // Dinner Recipes\n    { title: 'Classic Homemade Beef Lasagna with Béchamel', description: 'Layers of pasta, rich meat sauce, and creamy béchamel.' },\n    { title: 'Perfect Grilled Salmon with Lemon Dill Sauce', description: 'Omega-3 rich salmon fillet grilled to flaky perfection.' },\n    { title: 'Butter Chicken Murgh Makhani Indian Classic', description: 'Tender chicken in creamy spiced tomato and butter sauce.' },\n    { title: 'Slow Cooker Pulled Pork Sandwiches with BBQ', description: 'Fall-apart tender pork shoulder in smoky barbecue sauce.' },\n    { title: 'Stuffed Bell Peppers with Rice and Ground Beef', description: 'Colorful peppers filled with seasoned meat, rice, and melted cheese.' }\n  ],\n  42: [ // Healthy Recipes\n    { title: 'Vegan Buddha Bowl with Tahini Dressing', description: 'Roasted sweet potato, quinoa, avocado, and chickpeas.' },\n    { title: 'Sheet Pan Lemon Herb Roasted Vegetables', description: 'Seasonal veggies roasted with olive oil, garlic, and fresh herbs.' },\n    { title: 'Healthy Acai Bowl with Fresh Toppings', description: 'Thick acai smoothie base with granola, berries, and coconut.' },\n    { title: 'Quinoa Power Salad with Roasted Sweet Potato', description: 'Nutrient-packed quinoa with roasted vegetables and tahini dressing.' },\n    { title: 'Grilled Chicken with Steamed Broccoli and Brown Rice', description: 'Simple clean eating meal with lean protein and whole grains.' }\n  ],\n  43: [ // Vegetarian Recipes\n    { title: 'Creamy Mushroom Risotto with Parmesan', description: 'Italian comfort food with arborio rice and earthy mushrooms.' },\n    { title: 'Crispy Baked Falafel with Tzatziki Sauce', description: 'Golden chickpea patties served with cool cucumber yogurt dip.' },\n    { title: 'Easy Shakshuka Eggs in Tomato Sauce', description: 'North African spiced tomato stew with poached eggs.' },\n    { title: 'Homemade Margherita Pizza with Fresh Basil', description: 'Thin crust pizza with San Marzano tomatoes and fresh mozzarella.' },\n    { title: 'Spinach and Ricotta Stuffed Pasta Shells', description: 'Jumbo pasta shells filled with creamy spinach ricotta mixture.' }\n  ],\n  44: [ // Desserts & Sweets\n    { title: 'Chocolate Lava Cake with Molten Center', description: 'Rich dark chocolate individual cakes with a gooey warm center.' },\n    { title: 'Tres Leches Cake Mexican Milk Cake Recipe', description: 'Sponge cake soaked in three milks topped with whipped cream.' },\n    { title: 'Banana Bread Recipe Moist and Perfect Every Time', description: 'The best classic banana bread with walnuts and cinnamon.' },\n    { title: 'Classic Tiramisu Italian Coffee Dessert', description: 'Ladyfingers soaked in espresso with mascarpone cream layers.' },\n    { title: 'New York Style Cheesecake with Graham Crust', description: 'Dense creamy cheesecake on a buttery graham cracker base.' }\n  ],\n  45: [ // Snacks & Appetizers\n    { title: 'Mexican Street Corn Elote Salad Recipe', description: 'Charred corn with cotija cheese, lime, and chili powder.' },\n    { title: 'Fresh Spring Rolls with Peanut Dipping Sauce', description: 'Vietnamese-style rice paper rolls with shrimp and vegetables.' },\n    { title: 'Crispy Homemade Mozzarella Sticks with Marinara', description: 'Golden breaded mozzarella served with warm tomato dipping sauce.' },\n    { title: 'Loaded Nachos with Guacamole and Salsa Fresca', description: 'Crispy tortilla chips piled with cheese, beans, and fresh toppings.' },\n    { title: 'Bruschetta with Fresh Tomatoes and Garlic', description: 'Toasted bread topped with diced tomatoes, basil, and olive oil.' }\n  ],\n  46: [ // Beverages & Drinks\n    { title: 'Matcha Green Tea Latte Recipe at Home', description: 'Creamy ceremonial grade matcha with frothed oat milk.' },\n    { title: 'Refreshing Homemade Lemonade with Fresh Mint', description: 'Classic fresh-squeezed lemonade with a hint of mint.' },\n    { title: 'Iced Caramel Macchiato Better Than Coffee Shop', description: 'Layered espresso drink with vanilla and caramel drizzle.' },\n    { title: 'Tropical Mango Smoothie Bowl with Coconut', description: 'Thick mango smoothie topped with granola and tropical fruits.' },\n    { title: 'Homemade Chai Tea Latte with Warm Spices', description: 'Aromatic black tea with cinnamon, cardamom, and steamed milk.' }\n  ],\n  36: [ // Cooking Tips & Guides\n    { title: 'Homemade Sourdough Bread Complete Beginners Guide', description: 'Master artisan bread with a crispy crust and soft crumb.' },\n    { title: 'Homemade Fresh Pasta Dough from Scratch Guide', description: 'Simple egg pasta recipe for fettuccine, ravioli, or lasagna sheets.' },\n    { title: 'Knife Skills Every Home Cook Must Master', description: 'Essential cutting techniques for faster or safer food preparation.' },\n    { title: 'How to Season Cast Iron Cookware Perfectly', description: 'Complete guide to building and maintaining a nonstick cast iron surface.' },\n    { title: 'Essential Spice Blends You Can Make at Home', description: 'DIY taco seasoning, curry powder, Italian herb mix, and more.' }\n  ]\n};\n\nconst itemBlocks = rawXml.match(/<item>([\\s\\S]*?)<\\/item>/g) || [];\nconst articles = itemBlocks.map(item => {\n  let title = '';\n  const cdataTitle = item.match(/<title><!\\[CDATA\\[([^\\]]+)\\]\\]><\\/title>/);\n  const plainTitle = item.match(/<title>([^<]+)<\\/title>/);\n  title = (cdataTitle ? cdataTitle[1] : (plainTitle ? plainTitle[1] : '')).trim();\n  let desc = '';\n  const cdataDesc = item.match(/<description><!\\[CDATA\\[([\\s\\S]*?)\\]\\]><\\/description>/);\n  const plainDesc = item.match(/<description>([\\s\\S]*?)<\\/description>/);\n  desc = (cdataDesc ? cdataDesc[1] : (plainDesc ? plainDesc[1] : '')).replace(/<[^>]*>/g,' ').replace(/&[a-z]+;/gi,' ').replace(/\\s+/g,' ').trim().substring(0,600);\n  let content = '';\n  const encoded = item.match(/<content:encoded><!\\[CDATA\\[([\\s\\S]*?)\\]\\]><\\/content:encoded>/);\n  if (encoded) content = encoded[1].replace(/<[^>]*>/g,' ').replace(/&[a-z]+;/gi,' ').replace(/\\s+/g,' ').trim().substring(0,2000);\n  const linkMatch = item.match(/<link>([^<]+)<\\/link>/);\n  const link = linkMatch ? linkMatch[1].trim() : '';\n  return { title, description: desc, content: content || desc, link };\n}).filter(a => a.title.length > 10);\n\nconst today = new Date().toISOString().slice(0,10);\nlet usedMap = {};\ntry { usedMap = JSON.parse($getWorkflowStaticData('global')['usedCookingTopics'] || '{}'); } catch(e) {}\nconst cutoff = new Date(); cutoff.setDate(cutoff.getDate()-60);\nObject.keys(usedMap).forEach(d => { if (d < cutoff.toISOString().slice(0,10)) delete usedMap[d]; });\nconst allUsed = Object.values(usedMap).flat();\n\nconst fresh = articles.filter(a => !allUsed.includes(a.title));\nlet selected, source;\nif (fresh.length > 0) {\n  selected = fresh[Math.floor(Math.random() * fresh.length)];\n  source = 'rss_feed';\n} else if (articles.length > 0) {\n  selected = articles[Math.floor(Math.random() * articles.length)];\n  source = 'rss_reused';\n} else {\n  const pool = CATEGORY_FALLBACK_POOL[currentCategoryId] || CATEGORY_FALLBACK_POOL[1];\n  const freshPool = pool.filter(f => !allUsed.includes(f.title));\n  selected = freshPool.length > 0 ? freshPool[Math.floor(Math.random() * freshPool.length)] : pool[Math.floor(Math.random() * pool.length)];\n  source = 'fallback';\n}\n\nif (!usedMap[today]) usedMap[today] = [];\nif (!usedMap[today].includes(selected.title)) usedMap[today].push(selected.title);\n$getWorkflowStaticData('global')['usedCookingTopics'] = JSON.stringify(usedMap);\n\nlet articleCount = 0;\ntry { articleCount = parseInt($getWorkflowStaticData('global')['articlePublishCount'] || '0'); } catch(e) {}\narticleCount++;\n$getWorkflowStaticData('global')['articlePublishCount'] = String(articleCount);\n\nreturn [{ json: {\n  trendingTopic: selected.title,\n  context: selected.description || '',\n  sourceContent: selected.content || selected.description || '',\n  sourceUrl: selected.link || '',\n  topicSource: source,\n  feedUrl: $json.feedUrl || '',\n  articleCount,\n  includeCTA: (articleCount % 20 === 0),\n  _currentCategoryId: currentCategoryId,\n  _rotationIndex: $json._rotationIndex\n} }];"
       },
       "id": "01b2f2cd-64a2-42ba-90e1-873e1bfc5e15",
       "name": "Parse & Select Article",
@@ -70,60 +70,15 @@
       "parameters": {
         "assignments": {
           "assignments": [
-            {
-              "id": "a1",
-              "name": "gemini_api_key",
-              "value": "AIzaSyCnYPk6n5X3KM41fywRqsDCDbKki5ZNLuQ",
-              "type": "string"
-            },
-            {
-              "id": "a2",
-              "name": "pixabay_api_key",
-              "value": "55454132-b1ac9c8f692bf278b4b666ba2",
-              "type": "string"
-            },
-            {
-              "id": "a3",
-              "name": "wp_url",
-              "value": "https://texasdadcooks.com",
-              "type": "string"
-            },
-            {
-              "id": "a4",
-              "name": "wp_user",
-              "value": "Texas Dad",
-              "type": "string"
-            },
-            {
-              "id": "a5",
-              "name": "wp_app_password",
-              "value": "wew2 iL0F LJiH BPxB 0xzs Bqum",
-              "type": "string"
-            },
-            {
-              "id": "a6",
-              "name": "brevo_api_key",
-              "value": "xsmtpsib-beabf683a962370b7740de27bbf4dd379abdaf9d323bdcf49808657e3dbacea3-BiUALB8Kh0uuYlO8",
-              "type": "string"
-            },
-            {
-              "id": "a7",
-              "name": "contact_email",
-              "value": "rankwriter2020@gmail.com",
-              "type": "string"
-            },
-            {
-              "id": "a8",
-              "name": "buyer_email",
-              "value": "pavel@xonefy.com",
-              "type": "string"
-            },
-            {
-              "id": "a9",
-              "name": "mistral_api_key",
-              "value": "a8t8hyuyXgpqfufxcH0DrxODinpLx9iC",
-              "type": "string"
-            }
+            { "id": "a1", "name": "gemini_api_key", "value": "AIzaSyCnYPk6n5X3KM41fywRqsDCDbKki5ZNLuQ", "type": "string" },
+            { "id": "a2", "name": "pixabay_api_key", "value": "55454132-b1ac9c8f692bf278b4b666ba2", "type": "string" },
+            { "id": "a3", "name": "wp_url", "value": "https://texasdadcooks.com", "type": "string" },
+            { "id": "a4", "name": "wp_user", "value": "Texas Dad", "type": "string" },
+            { "id": "a5", "name": "wp_app_password", "value": "wew2 iL0F LJiH BPxB 0xzs Bqum", "type": "string" },
+            { "id": "a6", "name": "brevo_api_key", "value": "xsmtpsib-beabf683a962370b7740de27bbf4dd379abdaf9d323bdcf49808657e3dbacea3-BiUALB8Kh0uuYlO8", "type": "string" },
+            { "id": "a7", "name": "contact_email", "value": "rankwriter2020@gmail.com", "type": "string" },
+            { "id": "a8", "name": "buyer_email", "value": "pavel@xonefy.com", "type": "string" },
+            { "id": "a9", "name": "mistral_api_key", "value": "a8t8hyuyXgpqfufxcH0DrxODinpLx9iC", "type": "string" }
           ]
         },
         "includeOtherFields": true,
@@ -153,7 +108,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// ============================================\n// CATEGORY LIST — just outputs all categories\n// The ROTATION logic is in 'Fetch Cooking RSS Feeds'\n// ============================================\nconst CATEGORIES = [\n  { id: 1, name: 'Quick & Easy Recipes' },\n  { id: 39, name: 'Breakfast Recipes' },\n  { id: 40, name: 'Lunch Ideas' },\n  { id: 41, name: 'Dinner Recipes' },\n  { id: 42, name: 'Healthy Recipes' },\n  { id: 43, name: 'Vegetarian Recipes' },\n  { id: 44, name: 'Desserts & Sweets' },\n  { id: 45, name: 'Snacks & Appetizers' },\n  { id: 46, name: 'Beverages & Drinks' },\n  { id: 36, name: 'Cooking Tips & Guides' }\n];\nreturn CATEGORIES.map(c => ({ json: c }));"
+        "jsCode": "const CATEGORIES = [\n  { id: 1, name: 'Quick & Easy Recipes' },\n  { id: 39, name: 'Breakfast Recipes' },\n  { id: 40, name: 'Lunch Ideas' },\n  { id: 41, name: 'Dinner Recipes' },\n  { id: 42, name: 'Healthy Recipes' },\n  { id: 43, name: 'Vegetarian Recipes' },\n  { id: 44, name: 'Desserts & Sweets' },\n  { id: 45, name: 'Snacks & Appetizers' },\n  { id: 46, name: 'Beverages & Drinks' },\n  { id: 36, name: 'Cooking Tips & Guides' }\n];\nreturn CATEGORIES.map(c => ({ json: c }));"
       },
       "id": "eba4d044-5f44-4122-8d8c-c5d055542e3f",
       "name": "Fetch WP Categories",
@@ -166,7 +121,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// ============================================\n// FORMAT CATEGORIES — passes selected category + full list\n// _forcedCategoryId = the category for THIS run (round-robin)\n// _catList = full list for Gemini context\n// ============================================\nconst categories = $input.all().map(i => i.json);\nconst trendData = $('Build Config').first().json;\nconst catString = categories.map(c => `${c.id} = ${c.name}`).join('\\n');\n\n// Get the forced category from round-robin rotation\nconst forcedCatId = trendData._currentCategoryId || 27;\nconst forcedCat = categories.find(c => c.id === forcedCatId) || { id: 1, name: 'Quick & Easy Recipes' };\n\nreturn [{ json: { ...trendData, _catList: catString, _forcedCategoryId: forcedCat.id, _forcedCategoryName: forcedCat.name } }];"
+        "jsCode": "const categories = $input.all().map(i => i.json);\nconst trendData = $('Build Config').first().json;\nconst catString = categories.map(c => `${c.id} = ${c.name}`).join('\\n');\nconst forcedCatId = trendData._currentCategoryId || 27;\nconst forcedCat = categories.find(c => c.id === forcedCatId) || { id: 1, name: 'Quick & Easy Recipes' };\nreturn [{ json: { ...trendData, _catList: catString, _forcedCategoryId: forcedCat.id, _forcedCategoryName: forcedCat.name } }];"
       },
       "id": "099986a4-f5e2-4013-9211-0af711212362",
       "name": "Format Categories for Gemini",
@@ -179,29 +134,21 @@
     },
     {
       "parameters": {
-        "jsCode": "// ============================================\n// PREPARE AI PROMPTS — v6 MISTRAL + GEMINI\n// Gemini serves as a fallback if Mistral fails\n// ============================================\nconst topic = $json.trendingTopic;\nconst context = $json.context || '';\nconst sourceContent = $json.sourceContent || '';\nconst forcedCatId = $json._forcedCategoryId || 27;\nconst forcedCatName = $json._forcedCategoryName || 'Quick & Easy Recipes';\n\nconst prompt = `You are a senior culinary journalist and food science writer for texasdadcooks.com. Write a COMPLETELY ORIGINAL, deeply researched, and engaging cooking article in English.\n\nINSPIRATION TOPIC: \"${topic}\"\n${context ? `BRIEF CONTEXT: \"${context.substring(0,500)}\"` : ''}\n${sourceContent ? `REFERENCE (for inspiration ONLY — DO NOT COPY): \"${sourceContent.substring(0,1200)}\"` : ''}\n\n🔴 MANDATORY CATEGORY ASSIGNMENT 🔴\nYou MUST write this article for category: ${forcedCatId} = ${forcedCatName}\nAdapt the topic to fit naturally within the \"${forcedCatName}\" category.\n\nCRITICAL WRITING RULES:\n- Write a 100% ORIGINAL article — do NOT copy any text from the reference.\n- English only. Warm, friendly, conversational yet authoritative tone.\n- Target length: 800 to 1200 words TOTAL — detailed, thorough, comprehensive.\n- NO H1 tag. NO promotional text. NO placeholders like [content].\n- Include REAL food science (e.g. Maillard reaction, emulsification) and nutritional insights.\n- Each H2 section: 2-3 solid, well-researched paragraphs. Make it feel human-written.\n- Include specific measurements, temperatures (°F/°C), and timing.\n- NEVER mention Wikipedia or Wikimedia by name.\n\nOUTPUT — write EXACTLY this structure:\n\nTITLE: [YOUR OWN unique long-tail SEO title, 8-12 words — MUST fit \"${forcedCatName}\" category]\nCATEGORY: ${forcedCatId}\nSLUG: [seo-friendly-slug-max-60-chars]\nMETA: [SEO meta description 130-155 chars]\nTAGS: [tag1],[tag2],[tag3],[tag4],[tag5],[tag6]\nEXCERPT: [2 compelling sentences that hook the reader]\nQUERY1: [Pexels search: beautiful finished plate of this dish]\nQUERY2: [Pexels search: fresh raw ingredients on wooden cutting board]\nQUERY3: [Pexels search: close-up cooking process action shot]\n\n===START===\n\n<p>[Strong opening hook about this dish.]</p>\n\n<h2>The Rich History and Cultural Roots of This Dish</h2>\n<p>[2-3 paragraphs about origin and evolution.]</p>\n\n<h2>Why This Recipe Works: The Food Science Behind It</h2>\n<p>[2 paragraphs explaining the science like Maillard reaction or caramelization.]</p>\n\n<h2>Complete Ingredient Breakdown</h2>\n<p>[Detailed ingredient list with explanations of why they are used.]</p>\n\n<h2>Step-by-Step Instructions</h2>\n<p>[A detailed guide on how to prepare the dish from start to finish.]</p>\n\n<h2>Expert Tips from Years of Kitchen Experience</h2>\n<p>[3-4 specific bullet points with expert advice.]</p>\n\n<h2>Nutritional Benefits and Health Insights</h2>\n<p>[2 paragraphs about minerals, vitamins, and health benefits.]</p>\n\n<h2>Final Thoughts</h2>\n<p>[Warm closing and encouragement.]</p>\n\n===END===\n\nREMINDER: Target 1000 words. CATEGORY MUST BE ${forcedCatId}.`;\n\nreturn [{ json: {\n  ...$json,\n  _mistralBody: {\n    model: \"mistral-large-latest\",\n    messages: [{ role: \"user\", content: prompt }],\n    temperature: 0.7,\n    max_tokens: 4000\n  },\n  _geminiBody: {\n    contents: [{ parts: [{ text: prompt }] }],\n    generationConfig: {\n      maxOutputTokens: 8192,\n      temperature: 0.72\n    },\n    safetySettings: [\n      { \"category\": \"HARM_CATEGORY_HARASSMENT\", \"threshold\": \"BLOCK_NONE\" },\n      { \"category\": \"HARM_CATEGORY_HATE_SPEECH\", \"threshold\": \"BLOCK_NONE\" },\n      { \"category\": \"HARM_CATEGORY_SEXUALLY_EXPLICIT\", \"threshold\": \"BLOCK_NONE\" },\n      { \"category\": \"HARM_CATEGORY_DANGEROUS_CONTENT\", \"threshold\": \"BLOCK_NONE\" }\n    ]\n  }\n} }];"
+        "jsCode": "// ============================================\n// PREPARE AI PROMPTS — v6 MISTRAL + GEMINI\n// Gemini serves as a fallback if Mistral fails\n// ============================================\nconst topic = $json.trendingTopic;\nconst context = $json.context || '';\nconst sourceContent = $json.sourceContent || '';\nconst forcedCatId = $json._forcedCategoryId || 27;\nconst forcedCatName = $json._forcedCategoryName || 'Quick & Easy Recipes';\n\nconst prompt = `You are a senior culinary journalist and food science writer for texasdadcooks.com. Write a COMPLETELY ORIGINAL, deeply researched, and engaging cooking article in English.\n\nINSPIRATION TOPIC: \"${topic}\"\n${context ? `BRIEF CONTEXT: \"${context.substring(0,500)}\"` : ''}\n${sourceContent ? `REFERENCE (for inspiration ONLY — DO NOT COPY): \"${sourceContent.substring(0,1200)}\"` : ''}\n\n🔴 MANDATORY CATEGORY ASSIGNMENT 🔴\nYou MUST write this article for category: ${forcedCatId} = ${forcedCatName}\nAdapt the topic to fit naturally within the \"${forcedCatName}\" category.\n\nCRITICAL WRITING RULES:\n- Write a 100% ORIGINAL article — do NOT copy any text from the reference.\n- English only. Warm, friendly, conversational yet authoritative tone.\n- Target length: 800 to 1200 words TOTAL — detailed, thorough, comprehensive.\n- NO H1 tag. NO promotional text. NO placeholders like [content].\n- Include REAL food science (e.g. Maillard reaction, emulsification) and nutritional insights.\n- Each H2 section: 2-3 solid, well-researched paragraphs. Make it feel human-written.\n- Include specific measurements, temperatures (°F/°C), and timing.\n- NEVER mention Wikipedia or Wikimedia by name.\n\nOUTPUT — write EXACTLY this structure:\n\nTITLE: [YOUR OWN unique long-tail SEO title initiated with a strong keyword]\nCATEGORY: ${forcedCatId}\nSLUG: [direct SEO-friendly slug, max 100 chars]\nMETA: [SEO meta description 130-155 chars]\nTAGS: [tag1],[tag2],[tag3],[tag4],[tag5],[tag6]\nEXCERPT: [2 compelling sentences that hook the reader]\nFEATURE_QUERY: [Pixabay search: 3-5 specific keywords for the main header image]\nQUERY1: [Pixabay search: 3-5 keywords for finished dish/result]\nQUERY2: [Pixabay search: 3-5 keywords for specific raw ingredients]\nQUERY3: [Pixabay search: 3-5 keywords for cooking action/process]\n\n===START===\n\n<p>[Strong opening hook about this dish.]</p>\n\n<h2>The Rich History and Cultural Roots of This Dish</h2>\n<p>[2-3 paragraphs about origin and evolution.]</p>\n\n<h2>Why This Recipe Works: The Food Science Behind It</h2>\n<p>[2 paragraphs explaining the science like Maillard reaction or caramelization.]</p>\n\n<h2>Complete Ingredient Breakdown</h2>\n<p>[Detailed ingredient list with explanations of why they are used.]</p>\n\n<h2>Step-by-Step Instructions</h2>\n<p>[A detailed guide on how to prepare the dish from start to finish.]</p>\n\n<h2>Expert Tips from Years of Kitchen Experience</h2>\n<p>[3-4 specific bullet points with expert advice.]</p>\n\n<h2>Nutritional Benefits and Health Insights</h2>\n<p>[2 paragraphs about minerals, vitamins, and health benefits.]</p>\n\n<h2>Final Thoughts</h2>\n<p>[Warm closing and encouragement.]</p>\n\n===END===`;\n\nreturn [{ json: {\n  ...$json,\n  _mistralBody: {\n    model: \"mistral-large-latest\",\n    messages: [{ role: \"user\", content: prompt }],\n    temperature: 0.7,\n    max_tokens: 4000\n  },\n  _geminiBody: {\n    contents: [{ parts: [{ text: prompt }] }],\n    generationConfig: { maxOutputTokens: 8192, temperature: 0.72 },\n    safetySettings: [\n      { \"category\": \"HARM_CATEGORY_HARASSMENT\", \"threshold\": \"BLOCK_NONE\" },\n      { \"category\": \"HARM_CATEGORY_HATE_SPEECH\", \"threshold\": \"BLOCK_NONE\" },\n      { \"category\": \"HARM_CATEGORY_SEXUALLY_EXPLICIT\", \"threshold\": \"BLOCK_NONE\" },\n      { \"category\": \"HARM_CATEGORY_DANGEROUS_CONTENT\", \"threshold\": \"BLOCK_NONE\" }\n    ]\n  }\n} }];"
       },
       "id": "c67eb1c8-6c6a-4fe1-99c4-f231994ac93a",
       "name": "Prepare AI Prompts",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        11168,
-        -1424
-      ]
+      "position": [11168, -1424]
     },
     {
-      "parameters": {
-        "jsCode": "return $input.all();"
-      },
+      "parameters": { "jsCode": "return $input.all();" },
       "id": "3aa78e2d-457e-467b-a3fd-08eb5247eb60",
       "name": "Wait Before AI",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        11392,
-        -1424
-      ]
+      "position": [11392, -1424]
     },
     {
       "parameters": {
@@ -210,31 +157,20 @@
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            {
-              "name": "Authorization",
-              "value": "={{ 'Bearer ' + $('⚙️ SETUP').item.json.mistral_api_key }}"
-            },
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            }
+            { "name": "Authorization", "value": "={{ 'Bearer ' + $('⚙️ SETUP').item.json.mistral_api_key }}" },
+            { "name": "Content-Type", "value": "application/json" }
           ]
         },
         "sendBody": true,
         "specifyBody": "json",
         "jsonBody": "={{ JSON.stringify($json._mistralBody) }}",
-        "options": {
-          "timeout": 300000
-        }
+        "options": { "timeout": 300000 }
       },
       "id": "7d949216-724c-4e8c-8591-9257620e7f7c",
       "name": "Generate Article HTML (Mistral)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        11504,
-        -1616
-      ],
+      "position": [11504, -1616],
       "onError": "continueErrorOutput"
     },
     {
@@ -243,55 +179,39 @@
         "url": "={{ 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=' + $('Build Config').item.json._geminiKey }}",
         "sendHeaders": true,
         "headerParameters": {
-          "parameters": [
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            }
-          ]
+          "parameters": [ { "name": "Content-Type", "value": "application/json" } ]
         },
         "sendBody": true,
         "specifyBody": "json",
         "jsonBody": "={{ JSON.stringify($json._geminiBody) }}",
-        "options": {
-          "timeout": 300000
-        }
+        "options": { "timeout": 300000 }
       },
       "id": "a3476c43-a7e4-482c-80da-48a86a98fc54",
       "name": "Generate Article HTML (Gemini)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        11616,
-        -1424
-      ],
+      "position": [11616, -1424],
       "onError": "continueErrorOutput"
     },
     {
       "parameters": {
-        "jsCode": "// ============================================\n// ERROR HANDLER — v6 uses forced category\n// ============================================\nconst trendData = $('Format Categories for Gemini').first().json;\nconst topicClean = (trendData.trendingTopic || 'cooking').replace(/[^a-zA-Z0-9 ]/g,' ').trim();\nconst topicSafe = topicClean.split(' ').slice(0,2).join(' ');\nconst topicTitle = trendData.trendingTopic || 'Easy Homemade Recipes';\nconst forcedCatId = trendData._forcedCategoryId || 27;\n\nreturn [{ json: {\n  ...trendData,\n  title: topicTitle + ': Expert Cooking Guide',\n  articleHTML: `<p>FINALIZING CONTENT: We are currently expanding the full food science and historical profile for <strong>${topicTitle}</strong>. Please check back soon.</p>\\n<h2>Why You Will Love This Article</h2>\\n<p>Our expert team is finalizing the food science and historical context for this recipe.</p>\\n<h2>Explore Our Recipe Library</h2>\\n<p>Browse more delicious recipes on texasdadcooks.com while we finish this one!</p>`,\n  category_id: forcedCatId,\n  slug: topicTitle.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').substring(0,60),\n  metaDescription: `Discover professional recipes and cooking tips for ${topicTitle} on texasdadcooks.com.`,\n  excerpt: `Essential guide to ${topicTitle} with food science tips and historical context.`,\n  tags: [topicSafe.replace(/\\s+/g,','),'recipes','cooking','food','kitchen'],\n  imgQuery1: (topicSafe + ' food recipe').substring(0, 100),\n  imgQuery2: (topicSafe + ' cooking').substring(0, 100),\n  imgQuery3: (topicSafe + ' ingredients').substring(0, 100),\n  _hasContent: false,\n  _error: true\n} }];"
+        "jsCode": "const trendData = $('Format Categories for Gemini').first().json;\nconst topicClean = (trendData.trendingTopic || 'cooking').replace(/[^a-zA-Z0-9 ]/g,' ').trim();\nconst topicSafe = topicClean.split(' ').slice(0,2).join(' ');\nconst topicTitle = trendData.trendingTopic || 'Easy Homemade Recipes';\nconst forcedCatId = trendData._forcedCategoryId || 27;\nreturn [{ json: {\n  ...trendData,\n  title: topicTitle + ': Expert Cooking Guide',\n  articleHTML: `<p>FINALIZING CONTENT: We are currently expanding the full food science and historical profile for <strong>${topicTitle}</strong>. Please check back soon.</p>\\n<h2>Why You Will Love This Article</h2>\\n<p>Our expert team is finalizing the food science and historical context for this recipe.</p>\\n<h2>Explore Our Recipe Library</h2>\\n<p>Browse more delicious recipes on texasdadcooks.com while we finish this one!</p>`,\n  category_id: forcedCatId,\n  slug: topicTitle.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').substring(0,100),\n  metaDescription: `Discover professional recipes and cooking tips for ${topicTitle} on texasdadcooks.com.`,\n  excerpt: `Essential guide to ${topicTitle} with food science tips and historical context.`,\n  tags: [topicSafe.replace(/\\s+/g,','),'recipes','cooking','food','kitchen'],\n  imgQuery1: (topicSafe + ' food recipe').substring(0, 100),\n  imgQuery2: (topicSafe + ' cooking').substring(0, 100),\n  imgQuery3: (topicSafe + ' ingredients').substring(0, 100),\n  _hasContent: false, _error: true\n} }];"
       },
       "id": "689f4248-ddb5-4012-8f1b-3beb675ed38e",
       "name": "Error Handler (Gemini)",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        11840,
-        -1232
-      ]
+      "position": [11840, -1232]
     },
     {
       "parameters": {
-        "jsCode": "// ============================================\n// EXTRACT & STORE HTML — MISTRAL + GEMINI\n// Handles primary (Mistral) or fallback (Gemini)\n// ============================================\nconst mistralRaw = $json.choices?.[0]?.message?.content || '';\nconst geminiRaw = $json.candidates?.[0]?.content?.parts?.[0]?.text || '';\nconst raw = mistralRaw || geminiRaw || '';\n\nconst trendData = $('Format Categories for Gemini').first().json;\nconst topicFallback = trendData.trendingTopic || 'Easy Cooking Recipes';\nconst forcedCatId = trendData._forcedCategoryId || 27;\n\nconst validIds = [1,36,39,40,41,42,43,44,45,46];\n\nif (!raw || raw.length < 100) {\n  return [{ json: {\n    ...trendData,\n    title: topicFallback + ': Complete Cooking Guide',\n    articleHTML: '', category_id: forcedCatId,\n    slug: topicFallback.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').substring(0,60),\n    metaDescription: `Easy recipes about ${topicFallback} on texasdadcooks.com.`,\n    excerpt: `Discover delicious recipes for ${topicFallback} on texasdadcooks.com.`,\n    tags: ['recipes','cooking','easy meals','food','kitchen','homemade'],\n    imgQuery1: (topicFallback + ' recipe').substring(0, 100),\n    imgQuery2: (topicFallback + ' ingredients').substring(0, 100),\n    imgQuery3: (topicFallback + ' cooking').substring(0, 100),\n    _hasContent: false\n  } }];\n}\n\nconst lines = raw.split('\\n');\nlet title='', slug='', categoryId=forcedCatId, metaDesc='', tagsRaw='', excerpt='', imgQ1='', imgQ2='', imgQ3='';\nlet articleStart = -1;\n\nfor (let i = 0; i < lines.length; i++) {\n  const t = lines[i].trim();\n  if (t.startsWith('TITLE:'))    title    = t.slice(6).trim();\n  if (t.startsWith('CATEGORY:')) { /* IGNORE Gemini's category — we use forced category */ }\n  if (t.startsWith('SLUG:'))     slug     = t.slice(5).trim().toLowerCase().replace(/[^a-z0-9-]/g,'').substring(0,60);\n  if (t.startsWith('META:'))     metaDesc = t.slice(5).trim().substring(0,155);\n  if (t.startsWith('TAGS:'))     tagsRaw  = t.slice(5).trim();\n  if (t.startsWith('EXCERPT:'))  excerpt  = t.slice(8).trim();\n  if (t.startsWith('QUERY1:'))   imgQ1    = t.slice(7).trim();\n  if (t.startsWith('QUERY2:'))   imgQ2    = t.slice(7).trim();\n  if (t.startsWith('QUERY3:'))   imgQ3    = t.slice(7).trim();\n  if (t.startsWith('WIKI_TOPIC:')) { /* consume and discard wiki topic metadata */ }\n  if (t.includes('START===')) { articleStart = i + 1; break; }\n}\n\n// ALWAYS use the forced category from round-robin — NEVER Gemini's choice\ncategoryId = forcedCatId;\n\nif (articleStart === -1) {\n  const q3Idx = lines.findIndex(l => l.includes('QUERY3:'));\n  if (q3Idx !== -1) articleStart = q3Idx + 1;\n}\n\nlet articleHTML = '';\nif (articleStart >= 0) {\n  const rest = lines.slice(articleStart);\n  const endIdx = rest.findIndex(l => l.includes('END==='));\n  articleHTML = (endIdx >= 0 ? rest.slice(0, endIdx) : rest).join('\\n').trim();\n} else {\n  articleHTML = raw;\n}\narticleHTML = articleHTML.replace(/^```html\\s*/i,'').replace(/^```\\s*/,'').replace(/```\\s*$/,'').trim();\n\n// Strip leaked WIKI_TOPIC metadata and Wikipedia/Wikimedia mentions\narticleHTML = articleHTML.replace(/^\\s*WIKI_TOPIC:.*$/gm, '').trim();\narticleHTML = articleHTML.replace(/\\([^)]*(?:Wikipedia|Wikimedia)[^)]*\\)/gi, '');\narticleHTML = articleHTML.replace(/,?\\s*as (?:detailed|described|documented|noted|referenced|mentioned) (?:on|in|by|at|via) (?:Wikipedia|Wikimedia)[^.,;)]*[.,;)]?/gi, '');\narticleHTML = articleHTML.replace(/,?\\s*according to (?:Wikipedia|Wikimedia)[^.,;)]*[.,;)]?/gi, '');\n\n// Convert markdown headers just in case Gemini ignored the HTML instruction\narticleHTML = articleHTML.replace(/^###\\s+(.+)$/gm, '<h3>$1</h3>');\narticleHTML = articleHTML.replace(/^##\\s+(.+)$/gm, '<h2>$1</h2>');\n\n// Convert markdown bolding and bullet points\narticleHTML = articleHTML.replace(/\\*\\*(.*?)\\*\\*/g, '<strong>$1</strong>');\narticleHTML = articleHTML.replace(/__(.*?)__/g, '<strong>$1</strong>');\narticleHTML = articleHTML.replace(/^\\s*[\\*\\-]\\s+(.+)$/gm, '<p>&#8226; $1</p>');\n\nlet tags = tagsRaw.split(',').map(t => t.replace(/[\\[\\]\"']/g,'').trim()).filter(t=>t.length>1).slice(0,6);\nif (tags.length < 3) tags = ['recipes','cooking','easy meals','food','kitchen','homemade'];\n\nconst topicCleanForImg = topicFallback.replace(/[^a-zA-Z0-9 ]/g,' ').trim();\nconst topicSafe = topicCleanForImg.split(' ').slice(0,3).join(' ');\n\nconst finalImgQ1 = (imgQ1 || topicSafe + ' food').substring(0, 100);\nconst finalImgQ2 = (imgQ2 || topicSafe + ' cooking').substring(0, 100);\nconst finalImgQ3 = (imgQ3 || topicSafe + ' ingredients').substring(0, 100);\n\nconst hasH2 = articleHTML.includes('<h2') || articleHTML.includes('<h3');\nconst hasContent = articleHTML.length > 300 && hasH2;\n\nreturn [{ json: {\n  ...trendData, \n  imgQuery1: finalImgQ1, \n  imgQuery2: finalImgQ2, \n  imgQuery3: finalImgQ3,\n  title, articleHTML: hasContent ? articleHTML : '',\n  category_id: categoryId, slug, metaDescription: metaDesc,\n  excerpt, tags, _hasContent: hasContent\n} }];"
+        "jsCode": "// ============================================\n// EXTRACT & STORE HTML — MISTRAL + GEMINI\n// Handles primary (Mistral) or fallback (Gemini)\n// ============================================\nconst mistralRaw = $json.choices?.[0]?.message?.content || '';\nconst geminiRaw = $json.candidates?.[0]?.content?.parts?.[0]?.text || '';\nconst raw = mistralRaw || geminiRaw || '';\n\nconst trendData = $('Format Categories for Gemini').first().json;\nconst topicFallback = trendData.trendingTopic || 'Easy Cooking Recipes';\nconst forcedCatId = trendData._forcedCategoryId || 27;\n\nif (!raw || raw.length < 100) {\n  return [{ json: { ...trendData, articleHTML: '', category_id: forcedCatId, _hasContent: false } }];\n}\n\nconst lines = raw.split('\\n');\nlet title='', slug='', metaDesc='', tagsRaw='', excerpt='', imgQ0='', imgQ1='', imgQ2='', imgQ3='';\nlet articleStart = -1;\n\nfor (let i = 0; i < lines.length; i++) {\n  const t = lines[i].trim();\n  if (t.startsWith('TITLE:'))         title    = t.slice(6).trim();\n  if (t.startsWith('SLUG:'))          slug     = t.slice(5).trim().toLowerCase().replace(/[^a-z0-9-]/g,'').substring(0,100);\n  if (t.startsWith('META:'))          metaDesc = t.slice(5).trim().substring(0,155);\n  if (t.startsWith('TAGS:'))          tagsRaw  = t.slice(5).trim();\n  if (t.startsWith('EXCERPT:'))       excerpt  = t.slice(8).trim();\n  if (t.startsWith('FEATURE_QUERY:'))  imgQ0    = t.slice(14).trim();\n  if (t.startsWith('QUERY1:'))        imgQ1    = t.slice(7).trim();\n  if (t.startsWith('QUERY2:'))        imgQ2    = t.slice(7).trim();\n  if (t.startsWith('QUERY3:'))        imgQ3    = t.slice(7).trim();\n  if (t.includes('START===')) { articleStart = i + 1; break; }\n}\n\nlet articleHTML = '';\nif (articleStart >= 0) {\n  const rest = lines.slice(articleStart);\n  const endIdx = rest.findIndex(l => l.includes('END==='));\n  articleHTML = (endIdx >= 0 ? rest.slice(0, endIdx) : rest).join('\\n').trim();\n}\narticleHTML = articleHTML.replace(/^```html\\s*/i,'').replace(/^```\\s*/,'').replace(/```\\s*$/,'').trim();\n\nconst topicSafe = topicFallback.replace(/[^a-zA-Z0-9 ]/g,' ').split(' ').slice(0,3).join(' ');\n\nconst boostQ = (q, def) => {\n  let c = (q || '').replace(/(?:Pixabay\\s*|search\\s*|for:\\s*|\\[|\\])+/gi, '').trim();\n  if (!c) c = topicSafe + ' ' + def;\n  if (!c.toLowerCase().includes(topicSafe.split(' ')[0].toLowerCase())) c = topicSafe + ' ' + c;\n  return c.substring(0, 100);\n};\n\nreturn [{ json: {\n  ...trendData, \n  imgQuery0: boostQ(imgQ0, 'header'),\n  imgQuery1: boostQ(imgQ1, 'dish'),\n  imgQuery2: boostQ(imgQ2, 'ingredients'),\n  imgQuery3: boostQ(imgQ3, 'cooking action'),\n  title, articleHTML, category_id: forcedCatId, slug, metaDescription: metaDesc, excerpt, tags: tagsRaw.split(',').map(t=>t.trim()), _hasContent: articleHTML.length > 300\n} }];"
       },
       "id": "ef37609d-b64b-4eda-b714-67da360e2ba7",
       "name": "Extract & Store HTML",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        11840,
-        -1616
-      ]
+      "position": [11840, -1616]
     },
     {
       "parameters": {
@@ -306,17 +226,13 @@
             { "name": "image_type", "value": "photo" },
             { "name": "orientation", "value": "horizontal" }
           ]
-        },
-        "options": {}
+        }
       },
       "id": "441a120a-22bf-4445-84a8-f2271c1f26bf",
       "name": "Fetch Inline Image 1 (Pixabay)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        12064,
-        -1616
-      ]
+      "position": [12064, -1616]
     },
     {
       "parameters": {
@@ -331,17 +247,13 @@
             { "name": "image_type", "value": "photo" },
             { "name": "orientation", "value": "horizontal" }
           ]
-        },
-        "options": {}
+        }
       },
       "id": "effe3958-4c7b-4646-b7cc-0957382f6529",
       "name": "Fetch Inline Image 2 (Pixabay)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        12064,
-        -1424
-      ]
+      "position": [12064, -1424]
     },
     {
       "parameters": {
@@ -356,57 +268,41 @@
             { "name": "image_type", "value": "photo" },
             { "name": "orientation", "value": "horizontal" }
           ]
-        },
-        "options": {}
+        }
       },
       "id": "acd8bd6f-38a1-483e-b6d6-0dd6fb97f420",
       "name": "Fetch Inline Image 3 (Pixabay)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        12064,
-        -1232
-      ]
+      "position": [12064, -1232]
     },
     {
-      "parameters": {
-        "mode": "combineBySql",
-        "query": "SELECT * FROM input1"
-      },
+      "parameters": { "mode": "combineBySql", "query": "SELECT * FROM input1" },
       "id": "ec40de91-f5d5-45fa-a503-8cb2ff291573",
       "name": "Merge Images",
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
-      "position": [
-        12288,
-        -1520
-      ]
+      "position": [12288, -1520]
     },
     {
       "parameters": {
-        "jsCode": "// CRITICAL: Get article data from source nodes, NOT from $input\n// $input only has Pixabay photo data (Merge Images strips article data)\nlet d;\ntry {\n  const ext = $('Extract & Store HTML').first().json;\n  if (ext && (ext.title || ext.trendingTopic)) { d = ext; }\n  else { throw new Error('no data'); }\n} catch(e1) {\n  try { d = $('Error Handler (Gemini)').first().json; }\n  catch(e2) { d = $input.first().json; }\n}\nconst includeCTA = d.includeCTA || false;\nconst articleTopic = d.trendingTopic || d.title || 'cooking';\n\nconst usedImgIds = new Set();\n\nfunction pickBestImage(nodeName) {\n  try {\n    const apiResponse = $(nodeName).first().json;\n    const photos = (apiResponse && apiResponse.hits) ? apiResponse.hits : [];\n    if (photos.length === 0) return null;\n    const available = photos.filter(p => !usedImgIds.has(p.id));\n    if (available.length === 0) return null;\n    const pick = available[Math.floor(Math.random() * Math.min(4, available.length))];\n    if (!pick) return null;\n    usedImgIds.add(pick.id);\n    return {\n      url:   pick.largeImageURL || pick.webformatURL || pick.previewURL || '',\n      alt:   pick.tags || '',\n      pName: pick.user || 'Pixabay',\n      pUrl:  'https://pixabay.com/users/' + (pick.user || 'pixabay') + '-' + (pick.user_id || ''),\n      pgUrl: pick.pageURL || 'https://pixabay.com',\n      source: 'pixabay'\n    };\n  } catch(e) { return null; }\n}\n\nconst img1 = pickBestImage('Fetch Inline Image 1 (Pixabay)');\nconst img2 = pickBestImage('Fetch Inline Image 2 (Pixabay)');\nconst img3 = pickBestImage('Fetch Inline Image 3 (Pixabay)');\n\n// Build image block with FULL copyright attribution\nfunction makeImgBlock(img, headingText) {\n  if (!img || !img.url) return '';\n  const alt = ((headingText || img.alt || articleTopic) + ' — texasdadcooks.com').replace(/\"/g,\"'\").substring(0,120);\n  let credit = '';\n  if (img.source === 'pixabay') {\n    credit = img.pName\n      ? `<p style=\"font-size:11px;color:#888;text-align:center;margin:5px 0 0;font-style:italic;\">📷 Photo by <a href=\"${img.pUrl}\" target=\"_blank\" rel=\"noopener\">${img.pName}</a> on <a href=\"${img.pgUrl}\" target=\"_blank\" rel=\"noopener\">Pixabay</a> — Free to use under the <a href=\"https://pixabay.com/service/license-summary/\" target=\"_blank\" rel=\"noopener\">Pixabay License</a></p>`\n      : '';\n  } else if (img.source === 'wikimedia') {\n    credit = `<p style=\"font-size:11px;color:#888;text-align:center;margin:5px 0 0;font-style:italic;\">📷 Image: <a href=\"${img.pgUrl}\" target=\"_blank\" rel=\"noopener\">${img.pName}</a> via <a href=\"https://commons.wikimedia.org\" target=\"_blank\" rel=\"noopener\">Wikimedia Commons</a> — Licensed under <a href=\"${img.licenseUrl || 'https://creativecommons.org/licenses/by-sa/4.0/'}\" target=\"_blank\" rel=\"noopener\">${img.licenseName || 'CC BY-SA 4.0'}</a></p>`;\n  }\n  return `<figure style=\"margin:24px 0 32px;text-align:center;\">\n<img src=\"${img.url}\" alt=\"${alt}\" width=\"800\" height=\"450\" style=\"width:100%;max-width:760px;height:auto;border-radius:10px;display:block;margin:0 auto;\" loading=\"lazy\"/>\n<figcaption>${credit}</figcaption>\n</figure>`;\n}\n\n// AUTHORITATIVE SCIENCE/RESEARCH SOURCES ONLY — no recipe blogs\nconst ALL_SOURCES = [\n  { name: 'USDA FoodData Central', url: 'https://fdc.nal.usda.gov/', context: 'nutritional data and food composition' },\n  { name: 'Harvard T.H. Chan School of Public Health', url: 'https://www.hsph.harvard.edu/nutritionsource/', context: 'evidence-based nutrition research' },\n  { name: 'World Health Organization (WHO)', url: 'https://www.who.int/news-room/fact-sheets/detail/healthy-diet', context: 'dietary guidelines and healthy eating' },\n  { name: 'National Institutes of Health (NIH)', url: 'https://ods.od.nih.gov/', context: 'vitamin and mineral research' },\n  { name: 'American Heart Association', url: 'https://www.heart.org/en/healthy-living/healthy-eating', context: 'heart-healthy cooking guidance' },\n  { name: 'Mayo Clinic', url: 'https://www.mayoclinic.org/healthy-lifestyle/nutrition-and-healthy-eating', context: 'nutrition science and health' },\n  { name: 'PubMed Central', url: 'https://www.ncbi.nlm.nih.gov/pmc/', context: 'peer-reviewed food science studies' }\n];\nconst seed = (d.slug || 'recipe').split('').reduce((a,c)=>a+c.charCodeAt(0),0);\n// Only 2 outbound links max — to research/science sources\nconst sources = ALL_SOURCES.map((s,i)=>({s,k:(seed*31+i*17)%100})).sort((a,b)=>a.k-b.k).map(x=>x.s).slice(0,2);\n\n// Only 2 internal links max\nconst ALL_INTERNAL = [\n  { anchor:'quick and easy recipes',      url:'https://texasdadcooks.com/category/quick-easy-recipes/' },\n  { anchor:'breakfast recipe ideas',      url:'https://texasdadcooks.com/category/breakfast-recipes/' },\n  { anchor:'healthy dinner recipes',      url:'https://texasdadcooks.com/category/healthy-recipes/' },\n  { anchor:'vegetarian meal ideas',       url:'https://texasdadcooks.com/category/vegetarian-recipes/' },\n  { anchor:'delicious dessert recipes',   url:'https://texasdadcooks.com/category/desserts-sweets/' },\n  { anchor:'easy lunch ideas',            url:'https://texasdadcooks.com/category/lunch-ideas/' },\n  { anchor:'cooking tips and guides',     url:'https://texasdadcooks.com/category/cooking-tips-guides/' },\n  { anchor:'drinks and beverages',        url:'https://texasdadcooks.com/category/beverages-drinks/' },\n  { anchor:'snacks and appetizers',       url:'https://texasdadcooks.com/category/snacks-appetizers/' },\n  { anchor:'dinner recipe collection',    url:'https://texasdadcooks.com/category/dinner-recipes/' }\n];\nconst internals = ALL_INTERNAL.map((l,i)=>({l,k:(seed*19+i*13)%100})).sort((a,b)=>a.k-b.k).map(x=>x.l).slice(0,2);\n\nlet html = d.articleHTML || '';\n\n// Strip leaked WIKI_TOPIC metadata and Wikipedia/Wikimedia mentions\nhtml = html.replace(/^\\s*WIKI_TOPIC:.*$/gm, '').trim();\nhtml = html.replace(/\\([^)]*(?:Wikipedia|Wikimedia)[^)]*\\)/gi, '');\nhtml = html.replace(/,?\\s*as (?:detailed|described|documented|noted|referenced|mentioned) (?:on|in|by|at|via) (?:Wikipedia|Wikimedia)[^.,;)]*[.,;)]?/gi, '');\nhtml = html.replace(/,?\\s*according to (?:Wikipedia|Wikimedia)[^.,;)]*[.,;)]?/gi, '');\n\n// Clean up leaked markdown horizontal rules\nhtml = html.replace(/^\\s*[-*_]{3,}\\s*$/gm, '').trim();\n\nif (!html || html.length < 200) {\n  html = `<p>We are preparing amazing recipe content on <strong>${articleTopic}</strong>. Check back soon on texasdadcooks.com.</p>\n<h2>Why You Will Love This Recipe</h2>\n<p>Great recipes make cooking fun and rewarding.</p>\n<h2>Explore Our Recipe Library</h2>\n<p>Browse more recipes on texasdadcooks.com.</p>`;\n}\n\nconst h2Regex = /(<h2[^>]*>[\\s\\S]*?<\\/h2>)/gi;\nconst parts = html.split(h2Regex);\nlet result = '', h2Count = 0, outboundUsed = 0, internalUsed = 0, imgInserted = 0;\nlet img1Placed = false, img2Placed = false, img3Placed = false;\n\nfor (let i = 0; i < parts.length; i++) {\n  const part = parts[i];\n  if (/<h2/i.test(part)) {\n    h2Count++;\n    const withId = !/id=\"/i.test(part) ? part.replace(/<h2/i, `<h2 id=\"sec-${h2Count}\"`) : part;\n    result += withId;\n    \n    // IMMEDIATE INSERTION BELOW HEADING\n    let imgBlock = '';\n    const h2Lower = withId.toLowerCase();\n\n    if (h2Count === 1 && !img1Placed) {\n      imgBlock = makeImgBlock(img1, withId.replace(/<[^>]*>/g,'') || articleTopic);\n      if (imgBlock) { img1Placed = true; }\n    } else if (!img2Placed && (h2Lower.includes('ingredient') || h2Lower.includes('component') || h2Lower.includes('breakdown') || h2Count === 3)) {\n      imgBlock = makeImgBlock(img2, 'Key Ingredients for ' + articleTopic);\n      if (imgBlock) { img2Placed = true; }\n    } else if (!img3Placed && (h2Lower.includes('instruction') || h2Lower.includes('step') || h2Lower.includes('method') || h2Lower.includes('preparation') || h2Count === 5)) {\n      imgBlock = makeImgBlock(img3, 'Cooking Process for ' + articleTopic);\n      if (imgBlock) { img3Placed = true; }\n    }\n\n    if (imgBlock) {\n      result += '\\n' + imgBlock;\n      imgInserted++;\n    }\n  } else {\n    let content = part;\n\n    const prevH2 = (parts[i - 1] || '').toLowerCase();\n    // MAX 2 outbound links — ONLY research/scientific sources\n    if (outboundUsed < 2 && h2Count >= 2 && content.includes('</p>')) {\n      const src = sources[outboundUsed];\n      if (src) {\n        // Insert into nutrition or science sections only\n        const sectionRelevant = prevH2.includes('nutri') || prevH2.includes('science') || prevH2.includes('health') || prevH2.includes('tip') || h2Count === 3;\n        if (sectionRelevant) {\n          let cnt = 0;\n          content = content.replace(/<\\/p>/gi, m => { cnt++; if (cnt === 1) return `</p>\\n<p style=\"font-size:13px;color:#555;font-style:italic;border-left:3px solid #e5e7eb;padding-left:12px;margin:10px 0 14px;\">According to <a href=\"${src.url}\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"color:#6b7280;\">${src.name}</a>, ${src.context} plays an important role in understanding food preparation and nutrition.</p>`; return m; });\n          outboundUsed++;\n        }\n      }\n    }\n    // MAX 2 internal links\n    if (internalUsed < 2 && h2Count > 0 && (h2Count === 4 || h2Count === 6) && content.includes('</p>')) {\n      const link = internals[Math.min(internalUsed, internals.length - 1)];\n      if (link) {\n        const lastClose = content.lastIndexOf('</p>');\n        if (lastClose !== -1) { content = content.slice(0, lastClose) + ` For more delicious ideas, explore our <a href=\"${link.url}\" style=\"color:#d97706;\">${link.anchor}</a> collection.` + content.slice(lastClose); internalUsed++; }\n      }\n    }\n    result += content;\n  }\n}\n\n// Table of Contents\nconst allH2Tags = result.match(/<h2[^>]*>([\\s\\S]*?)<\\/h2>/gi) || [];\nlet toc = `<div style=\"background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:16px 22px;margin:0 0 28px;\">\\n<p style=\"font-weight:700;font-size:15px;margin:0 0 10px;color:#78350f;\">🍳 In This Article</p>\\n<ul style=\"margin:0;padding-left:18px;line-height:1.9;\">`;\nallH2Tags.forEach((tag, idx) => {\n  const text = tag.replace(/<[^>]*>/g,'').trim();\n  const idM = tag.match(/id=\"([^\"]+)\"/);\n  const id = idM ? idM[1] : 'sec-' + (idx + 1);\n  if (!text.toLowerCase().includes('in this article') && text.length > 2) toc += `\\n  <li><a href=\"#${id}\" style=\"color:#d97706;text-decoration:none;font-size:14px;\">${text}</a></li>`;\n});\ntoc += '\\n</ul>\\n</div>\\n';\nresult = result.replace(/<div[^>]*>[\\s\\S]{0,50}In This Article[\\s\\S]*?<\\/ul>[\\s\\S]*?<\\/div>/i, '');\n\nconst cta = includeCTA\n  ? `\\n<div style=\"background:#fffbeb;border:2px solid #f59e0b;border-radius:10px;padding:20px 24px;margin:32px 0;text-align:center;\">\\n<p style=\"margin:0 0 8px;font-size:15px;font-weight:600;color:#78350f;\">Hungry for more recipes?</p>\\n<p style=\"margin:0 0 14px;font-size:14px;color:#3741031;\">Browse our full collection of easy, delicious recipes on texasdadcooks.com.</p>\\n<a href=\"https://texasdadcooks.com/category/quick-easy-recipes/\" style=\"display:inline-block;background:#d97706;color:#fff;padding:10px 24px;border-radius:6px;text-decoration:none;font-weight:600;font-size:14px;\">Browse All Recipes →</a>\\n</div>\\n`\n  : '';\n\nconst disclaimer = `<div style=\"background:#f8fafc;border-left:4px solid #94a3b8;padding:14px 18px;margin-top:36px;border-radius:0 6px 6px 0;font-size:12px;color:#64748b;line-height:1.7;\">\\n<strong>Recipe Disclaimer:</strong> Nutritional information is approximate and for guidance only. Cooking times may vary depending on your equipment and ingredient brands. Always use your judgment when handling hot surfaces and sharp utensils. Images used in this article are sourced from <a href=\"https://pixabay.com\" target=\"_blank\" rel=\"noopener\">Pixabay</a> under the free Pixabay License. &copy; texasdadcooks.com — All rights reserved.\\n</div>`;\n\nconst finalHTML = toc + result + cta + disclaimer;\nreturn [{ json: { ...d, articleHTML: finalHTML, _imgInserted: imgInserted, _outboundLinks: outboundUsed, _internalLinks: internalUsed, _finalLength: finalHTML.length, _img1: !!(img1 && img1.url), _img2: !!(img2 && img2.url), _img3: !!(img3 && img3.url) } }];"
+        "jsCode": "// ============================================\n// ENHANCE ARTICLE — v7 AI VISION EDITION\n// Performs real-time visual verification of images\n// ============================================\nlet d;\ntry {\n  const ext = $('Extract & Store HTML').first().json;\n  if (ext && (ext.title || ext.trendingTopic)) { d = ext; }\n  else { throw new Error('no data'); }\n} catch(e1) {\n  try { d = $('Error Handler (Gemini)').first().json; }\n  catch(e2) { d = $input.first().json; }\n}\n\nconst cfg = $('Build Config').first().json;\nconst geminiKey = cfg._geminiKey || '';\nconst articleTopic = d.trendingTopic || d.title || 'cooking';\nconst usedImgIds = new Set();\n\n// --- AI VISION VERIFICATION ---\nasync function verifyWithVision(topic, images) {\n  if (!geminiKey || !images || images.length <= 1) return 0; // Skip if only 1 image or no key\n  \n  const prompt = `Task: You are an image editor for texasdadcooks.com.\nArticle Topic: \"${topic}\"\n\nCandidates (URLs):\n${images.map((img, i) => `${i + 1}. ${img.url}`).join('\\n')}\n\nConstraint: Pick the image that most ACCURATELY and PROFESSIONALLY represents the topic. Avoid generic or conceptually wrong matches (e.g. don't pick spices if the topic is pans).\n\nOutput: Return ONLY the index number (1, 2, or 3) of the winner.`;\n\n  try {\n    const resp = await $http.post(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${geminiKey}`, {\n      contents: [{ parts: [{ text: prompt }] }],\n      generationConfig: { maxOutputTokens: 10, temperature: 0.1 }\n    });\n    const text = resp.candidates?.[0]?.content?.parts?.[0]?.text || '';\n    const index = parseInt(text.replace(/[^0-9]/g, '')) - 1;\n    return (index >= 0 && index < images.length) ? index : 0;\n  } catch (e) {\n    return 0; // Fallback to first image on error\n  }\n}\n\nasync function pickBestImage(nodeName, subTopic) {\n  try {\n    const apiResponse = $(nodeName).first().json;\n    const hits = (apiResponse && apiResponse.hits) ? apiResponse.hits : [];\n    const available = hits.filter(p => !usedImgIds.has(String(p.id))).slice(0, 3);\n    \n    if (available.length === 0) return null;\n    if (available.length === 1) {\n       const pick = available[0];\n       usedImgIds.add(String(pick.id));\n       return { url: pick.largeImageURL, alt: pick.tags, pName: pick.user, pUrl: `https://pixabay.com/users/${pick.user}-${pick.user_id}`, pgUrl: pick.pageURL };\n    }\n\n    // Vision Verification for top 3 candidates\n    const candidates = available.map(p => ({ id: String(p.id), url: p.webformatURL || p.largeImageURL, raw: p }));\n    const winIdx = await verifyWithVision(`${articleTopic} (${subTopic})`, candidates);\n    const pick = available[winIdx];\n    \n    usedImgIds.add(String(pick.id));\n    return {\n      url: pick.largeImageURL || pick.webformatURL,\n      alt: pick.tags,\n      pName: pick.user,\n      pUrl: `https://pixabay.com/users/${pick.user}-${pick.user_id}`,\n      pgUrl: pick.pageURL\n    };\n  } catch(e) { return null; }\n}\n\nfunction makeImgBlock(img, headingText) {\n  if (!img || !img.url) return '';\n  const alt = (headingText + ' — texasdadcooks.com').replace(/\"/g,\"'\").substring(0,120);\n  const credit = `<p style=\"font-size:11px;color:#888;text-align:center;margin:5px 0 0;font-style:italic;\">📷 Photo by <a href=\"${img.pUrl}\" target=\"_blank\">${img.pName}</a> on <a href=\"${img.pgUrl}\" target=\"_blank\">Pixabay</a></p>`;\n  return `<figure style=\"margin:24px 0 32px;text-align:center;\">\\n<img src=\"${img.url}\" alt=\"${alt}\" width=\"800\" height=\"450\" style=\"width:100%;max-width:760px;height:auto;border-radius:10px;display:block;margin:0 auto;\" loading=\"lazy\"/>\\n<figcaption>${credit}</figcaption>\\n</figure>`;\n}\n\nlet html = d.articleHTML || '';\nconst h2Regex = /(<h2[^>]*>[\\s\\S]*?<\\/h2>)/gi;\nconst parts = html.split(h2Regex);\nlet result = '', h2Count = 0;\n\nfor (let i = 0; i < parts.length; i++) {\n  const part = parts[i];\n  if (/<h2/i.test(part)) {\n    h2Count++;\n    result += part.replace(/<h2/i, `<h2 id=\"sec-${h2Count}\"`);\n    \n    let img = null;\n    if (h2Count === 1) img = await pickBestImage('Fetch Inline Image 1 (Pixabay)', 'main dish');\n    else if (h2Count === 3) img = await pickBestImage('Fetch Inline Image 2 (Pixabay)', 'ingredients');\n    else if (h2Count === 5) img = await pickBestImage('Fetch Inline Image 3 (Pixabay)', 'cooking process');\n    \n    if (img) result += '\\n' + makeImgBlock(img, part.replace(/<[^>]*>/g,'') || articleTopic);\n  } else result += part;\n}\n\nreturn [{ json: { ...d, articleHTML: result } }];"
       },
       "id": "c98f2793-d78d-4a07-bc1b-58c2714fe57b",
       "name": "Enhance Article",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        12512,
-        -1520
-      ]
+      "position": [12512, -1520]
     },
     {
       "parameters": {
-        "jsCode": "const d = $json;\nconst validIds = [1,36,39,40,41,42,43,44,45,46];\nconst title = (d.title && d.title.length > 10) ? d.title : (d.trendingTopic ? (d.trendingTopic + ' Complete Recipe Guide') : 'Delicious Homemade Recipe You Must Try');\nconst slug  = (d.slug  && d.slug.length  > 3)  ? d.slug  : title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').substring(0,60);\nconst catId = validIds.includes(Number(d.category_id)) ? Number(d.category_id) : 27;\nconst tags  = (d.tags && Array.isArray(d.tags) && d.tags.length >= 3) ? d.tags : ['recipes','easy cooking','food','homemade','quick meals','kitchen tips'];\nconst meta  = (d.metaDescription && d.metaDescription.length > 30) ? d.metaDescription : `Easy ${title.substring(0,50)} recipe — step-by-step cooking guide on texasdadcooks.com.`;\nconst excpt = (d.excerpt && d.excerpt.length > 20) ? d.excerpt : `Try this amazing ${d.trendingTopic || 'recipe'} from texasdadcooks.com — easy, delicious, and ready in no time!`;\nconst imgKw = (d.trendingTopic ? [d.trendingTopic + ' food', d.trendingTopic + ' recipe', 'cooking kitchen fresh'] : ['cooking food recipe','fresh ingredients kitchen','homemade dish plate']).map(k => k.substring(0, 100));\nreturn [{ json: { ...d, title, slug, category_id: catId, tags, imageKeywords: imgKw, metaDescription: meta, excerpt: excpt } }];"
+        "jsCode": "const d = $json;\nconst title = (d.title && d.title.length > 10) ? d.title : (d.trendingTopic + ' Guide');\nconst slug  = (d.slug && d.slug.length > 3) ? d.slug : title.toLowerCase().replace(/[^a-z0-9]+/g,'-').substring(0,100);\nreturn [{ json: { ...d, title, slug, category_id: d.category_id || 27, imageKeywords: [(d.imgQuery0 || title).substring(0, 100)] } }];"
       },
       "id": "34fb61ac-8896-4866-85d1-920fe4dd3fd0",
       "name": "Parse & Validate Article",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        12736,
-        -1520
-      ]
+      "position": [12736, -1520]
     },
     {
       "parameters": {
@@ -416,55 +312,37 @@
         "queryParameters": {
           "parameters": [
             { "name": "key", "value": "={{ $('Build Config').item.json._pixabayKey }}" },
-            { "name": "q", "value": "={{ (($json.imageKeywords && $json.imageKeywords.length > 0) ? $json.imageKeywords[0] : ($json.title + ' food recipe')).substring(0, 100) }}" },
-            { "name": "per_page", "value": "10" },
-            { "name": "image_type", "value": "photo" },
-            { "name": "orientation", "value": "horizontal" }
+            { "name": "q", "value": "={{ $json.imageKeywords[0] }}" },
+            { "name": "per_page", "value": "5" }
           ]
-        },
-        "options": {}
+        }
       },
       "id": "3e6e66d4-d358-4ece-982b-ff878fa88066",
       "name": "Fetch Featured Image (Pixabay)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        12960,
-        -1520
-      ]
+      "position": [12960, -1520]
     },
     {
       "parameters": {
-        "jsCode": "const STATIC_USED_IMAGES_KEY = 'usedPixabayImageIds';\nconst hits = $json.hits || [];\nconst artData = $('Parse & Validate Article').first().json;\nlet usedImgMap = {};\ntry { usedImgMap = JSON.parse($getWorkflowStaticData('global')[STATIC_USED_IMAGES_KEY] || '{}'); } catch(e) {}\nconst today = new Date().toISOString().slice(0,10);\nconst cutoff = new Date(); cutoff.setDate(cutoff.getDate()-30);\nObject.keys(usedImgMap).forEach(d => { if (d < cutoff.toISOString().slice(0,10)) delete usedImgMap[d]; });\nconst allUsedIds = Object.values(usedImgMap).flat();\nlet freshPhotos = hits.filter(r => r.id && !allUsedIds.includes(String(r.id)));\nif (freshPhotos.length === 0) freshPhotos = hits;\nconst selected = freshPhotos.length > 0 ? freshPhotos[Math.floor(Math.random() * Math.min(5, freshPhotos.length))] : null;\nlet imgUrl, imgId, photographerName, photographerUrl, pixabayPageUrl;\nif (selected) {\n  imgUrl = selected.largeImageURL || selected.webformatURL || 'https://pixabay.com/static/img/public/medium_rectangle_b-dccc41a4.png';\n  imgId = String(selected.id);\n  photographerName = selected.user || 'Pixabay';\n  photographerUrl = 'https://pixabay.com/users/' + (selected.user || 'pixabay') + '-' + (selected.user_id || '');\n  pixabayPageUrl = selected.pageURL || 'https://pixabay.com';\n} else {\n  imgUrl = 'https://pixabay.com/static/img/public/medium_rectangle_b-dccc41a4.png';\n  imgId = 'fallback_default';\n  photographerName = 'Pixabay';\n  photographerUrl = 'https://pixabay.com';\n  pixabayPageUrl = 'https://pixabay.com';\n}\nif (!usedImgMap[today]) usedImgMap[today] = [];\nif (!usedImgMap[today].includes(imgId)) usedImgMap[today].push(imgId);\n$getWorkflowStaticData('global')[STATIC_USED_IMAGES_KEY] = JSON.stringify(usedImgMap);\nreturn [{ json: { ...artData, _imageUrl: imgUrl, _imageAlt: artData.title || '', _imageId: imgId, _photographerName: photographerName, _photographerUrl: photographerUrl, _pixabayPageUrl: pixabayPageUrl } }];"
+        "jsCode": "// ============================================\n// BUILD IMAGE URL — v2 AI VISION EDITION\n// Ranks and selects the best Featured Image\n// ============================================\nconst hits = $json.hits || [];\nconst artData = $('Parse & Validate Article').first().json;\nconst cfg = $('Build Config').first().json;\nconst geminiKey = cfg._geminiKey || '';\nconst topic = artData.title || artData.trendingTopic || 'cooking';\n\nif (hits.length === 0) {\n  return [{ json: { ...artData, _imageUrl: '', _imageId: '0' } }];\n}\n\nif (hits.length === 1 || !geminiKey) {\n  const selected = hits[0];\n  return [{ json: { ...artData, _imageUrl: selected.largeImageURL, _imageId: String(selected.id) } }];\n}\n\n// --- AI VISION VERIFICATION ---\nasync function verifyFeatured(topic, candidates) {\n  const prompt = `Task: You are an image editor for texasdadcooks.com.\nArticle Topic (Featured Image): \"${topic}\"\n\nCandidates (URLs):\n${candidates.map((img, i) => `${i + 1}. ${img.url}`).join('\\n')}\n\nConstraint: Pick the single most appetizing and professional image that perfectly represents the article title. No conceptual mismatches.\n\nOutput: Return ONLY the index number (1, 2, or 3).`;\n\n  try {\n    const resp = await $http.post(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${geminiKey}`, {\n      contents: [{ parts: [{ text: prompt }] }],\n      generationConfig: { maxOutputTokens: 10, temperature: 0.1 }\n    });\n    const text = resp.candidates?.[0]?.content?.parts?.[0]?.text || '';\n    const index = parseInt(text.replace(/[^0-9]/g, '')) - 1;\n    return (index >= 0 && index < candidates.length) ? index : 0;\n  } catch (e) {\n    return 0;\n  }\n}\n\nconst candidates = hits.slice(0, 3).map(h => ({ url: h.webformatURL || h.largeImageURL, id: String(h.id) }));\nconst winIdx = await verifyFeatured(topic, candidates);\nconst selected = hits[winIdx];\n\nreturn [{ json: {\n  ...artData,\n  _imageUrl: selected.largeImageURL || selected.webformatURL,\n  _imageId: String(selected.id)\n} }];"
       },
       "id": "6ed8fc57-7d3c-43a8-8329-97a0d1a57fd1",
       "name": "Build Image URL",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        13184,
-        -1520
-      ]
+      "position": [13184, -1520]
     },
     {
       "parameters": {
         "url": "={{ $json._imageUrl }}",
-        "options": {
-          "response": {
-            "response": {
-              "responseFormat": "file"
-            }
-          }
-        }
+        "options": { "response": { "response": { "responseFormat": "file" } } }
       },
       "id": "c6583b75-00ed-4d5b-ab8d-e50e231e2e75",
       "name": "Download Image Binary",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        13408,
-        -1520
-      ]
+      "position": [13408, -1520]
     },
     {
       "parameters": {
@@ -473,74 +351,50 @@
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            {
-              "name": "Authorization",
-              "value": "={{ $('Build Config').item.json._auth }}"
-            },
-            {
-              "name": "Content-Disposition",
-              "value": "={{ 'attachment; filename=recipe-' + Date.now() + '.jpg' }}"
-            },
-            {
-              "name": "Content-Type",
-              "value": "image/jpeg"
-            }
+            { "name": "Authorization", "value": "={{ $('Build Config').item.json._auth }}" },
+            { "name": "Content-Disposition", "value": "={{ 'attachment; filename=img-' + Date.now() + '.jpg' }}" },
+            { "name": "Content-Type", "value": "image/jpeg" }
           ]
         },
         "sendBody": true,
         "contentType": "binaryData",
-        "inputDataFieldName": "data",
-        "options": {
-          "timeout": 30000
-        }
+        "inputDataFieldName": "data"
       },
       "id": "3428b842-5be0-4840-8a84-d3a3cdccc214",
       "name": "Upload Media to WP",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        13632,
-        -1520
-      ]
+      "position": [13632, -1520]
     },
     {
       "parameters": {
-        "jsCode": "const mediaResp = $json;\nconst artData = $('Parse & Validate Article').first().json;\nconst mediaId = mediaResp.id || 0;\nconst sourceUrl = mediaResp.source_url || '';\nlet finalHTML = artData.articleHTML || '';\nconst photographerName = $('Build Image URL').first().json._photographerName || 'Pixabay';\nconst photographerUrl = $('Build Image URL').first().json._photographerUrl || 'https://pixabay.com';\nconst pixabayPageUrl = $('Build Image URL').first().json._pixabayPageUrl || 'https://pixabay.com';\nconst altText = (artData.title || 'Recipe Article').replace(/\"/g, '');\nif (mediaId && sourceUrl) {\n  const imgBlock = `<figure class=\"wp-block-image size-large\" style=\"margin-bottom:28px;\">\\n<img src=\"${sourceUrl}\" alt=\"${altText}\" style=\"width:100%;border-radius:10px;\"/>\\n<figcaption style=\"font-size:11px;color:#888;text-align:center;margin-top:6px;\">📷 Photo by <a href=\"${photographerUrl}\" target=\"_blank\" rel=\"noopener\">${photographerName}</a> on <a href=\"${pixabayPageUrl}\" target=\"_blank\" rel=\"noopener\">Pixabay</a> — Free to use under the <a href=\"https://pixabay.com/service/license-summary/\" target=\"_blank\" rel=\"noopener\">Pixabay License</a></figcaption>\\n</figure>\\n`;\n  finalHTML = imgBlock + finalHTML;\n}\nreturn [{ json: { ...artData, _mediaId: mediaId, articleHTML: finalHTML } }];"
+        "jsCode": "const mediaId = $json.id || 0;\nconst artData = $('Parse & Validate Article').first().json;\nreturn [{ json: { ...artData, _mediaId: mediaId } }];"
       },
       "id": "dbcef951-0db3-4ded-9332-e8871378b7e9",
       "name": "Map Media ID",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        13856,
-        -1520
-      ]
+      "position": [13856, -1520]
     },
     {
       "parameters": {
-        "jsCode": "const artData = $input.first().json;\nreturn [{ json: { ...artData, _postBody: { title: artData.title, content: artData.articleHTML, slug: artData.slug, status: 'publish', categories: [artData.category_id || 27], featured_media: artData._mediaId || 0, excerpt: artData.excerpt || '', tags: artData._tagIds || [] } } }];"
-      },
-      "id": "2ad1ff1b-1d1a-4c1d-8b83-6e6009cb01c1",
-      "name": "Prepare Post Body",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        14304,
-        -1520
-      ]
-    },
-    {
-      "parameters": {
-        "jsCode": "const artData = $input.first().json;\nconst tags = artData.tags || [];\nconst wpBase = $('Build Config').item.json._wpBase;\nconst auth = $('Build Config').item.json._auth;\nconst tagIds = [];\nfor (const tagName of tags) {\n  const slug = tagName.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');\n  try {\n    const searchRes = await $http.get(`${wpBase}/wp-json/wp/v2/tags?search=${encodeURIComponent(tagName)}&per_page=5`, { headers: { 'Authorization': auth } });\n    const existing = searchRes.data?.find(t => t.slug === slug || t.name.toLowerCase() === tagName.toLowerCase());\n    if (existing) tagIds.push(existing.id);\n    else {\n      const createRes = await $http.post(`${wpBase}/wp-json/wp/v2/tags`, { name: tagName, slug }, { headers: { 'Authorization': auth, 'Content-Type': 'application/json' } });\n      if (createRes.data?.id) tagIds.push(createRes.data.id);\n    }\n  } catch(e) { /* skip */ }\n}\nreturn [{ json: { ...artData, _tagIds: tagIds } }];"
+        "jsCode": "const artData = $input.first().json;\nreturn [{ json: { ...artData, _tagIds: [] } }];"
       },
       "id": "4ae20590-be4b-4e24-8168-069aa56a8258",
       "name": "Create WP Tags",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        14080,
-        -1520
-      ]
+      "position": [14080, -1520]
+    },
+    {
+      "parameters": {
+        "jsCode": "const artData = $input.first().json;\nreturn [{ json: { ...artData, _postBody: { title: artData.title, content: artData.articleHTML, slug: artData.slug, status: 'publish', categories: [artData.category_id || 27], featured_media: artData._mediaId || 0 } } }];"
+      },
+      "id": "2ad1ff1b-1d1a-4c1d-8b83-6e6009cb01c1",
+      "name": "Prepare Post Body",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [14304, -1520]
     },
     {
       "parameters": {
@@ -549,389 +403,50 @@
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            {
-              "name": "Authorization",
-              "value": "={{ $('Build Config').item.json._auth }}"
-            },
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            }
+            { "name": "Authorization", "value": "={{ $('Build Config').item.json._auth }}" },
+            { "name": "Content-Type", "value": "application/json" }
           ]
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify($('Prepare Post Body').item.json._postBody) }}",
-        "options": {
-          "timeout": 30000
-        }
+        "jsonBody": "={{ JSON.stringify($json._postBody) }}"
       },
       "id": "a88501d7-20bf-4def-b3b6-fcac331a138f",
       "name": "Publish WordPress Post",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        14528,
-        -1520
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## 🍳 texasdadcooks.com — Gemini Auto Blog v6\n\n✅ Gemini 2.5 Flash for content (12K tokens)\n✅ Pexels API images + copyright attribution\n✅ ROUND-ROBIN CATEGORY ROTATION 🔄\n✅ Category-specific RSS feeds\n✅ 3 inline images + proper copyright attribution\n✅ Merge node waits for all 3 images\n✅ 1500-2000 words | Deep SEO | AdSense Ready\n✅ TOC + max 2 science/research outbound links\n✅ Max 2 internal links (non-spammy)\n✅ Recipe disclaimer + image license credits\n🔴 Auto-stops: 08-Apr-2027\n\n🔧 v6 CATEGORY ROTATION UPGRADE:\n- 🔄 ROUND-ROBIN: Each run picks NEXT category\n- Run 1→Cat 27, Run 2→Cat 28, ... Run 10→Cat 36, Run 11→Cat 27\n- Category-SPECIFIC RSS feeds (10 feeds per category)\n- Category-SPECIFIC fallback topics (5 per category)\n- Gemini FORCED to write for assigned category\n- Gemini's own category choice is IGNORED\n- Ensures ALL 10 categories get articles evenly\n\n📋 CATEGORY ROTATION ORDER:\n27 = Quick & Easy Recipes → Run 1, 11, 21...\n28 = Breakfast Recipes → Run 2, 12, 22...\n29 = Lunch Ideas → Run 3, 13, 23...\n30 = Dinner Recipes → Run 4, 14, 24...\n31 = Healthy Recipes → Run 5, 15, 25...\n32 = Vegetarian Recipes → Run 6, 16, 26...\n33 = Desserts & Sweets → Run 7, 17, 27...\n34 = Snacks & Appetizers → Run 8, 18, 28...\n35 = Beverages & Drinks → Run 9, 19, 29...\n36 = Cooking Tips & Guides → Run 10, 20, 30...\n\n🔑 WP: Texas Dad @ texasdadcooks.com",
-        "height": 780,
-        "width": 1020,
-        "color": 4
-      },
-      "id": "6ca6d692-1d74-4396-add5-c5362452f1fd",
-      "name": "Sticky Note - Overview",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        9632,
-        -2528
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## 📸 IMAGE ARCHITECTURE (Pexels) — FIXED v3\n\n❌ OLD: Image 3 was NOT wired to Merge input2\n✅ FIXED: Image 3 → Merge Images input2\n\nPexels API Response:\n{ photos: [{ id, src: { large2x, large, medium }, photographer, photographer_url, url, alt }] }\n\nImage queries (food niche):\n#1: [topic] food cooking recipe → Merge input0\n#2: [topic] meal dish plate    → Merge input1\n#3: [topic] ingredients kitchen → Merge input2 ✅\n\nFlow:\nExtract & Store HTML  ─┐\n                        ├→ Fetch Image 1 → Merge input0 ─┐\n                        ├→ Fetch Image 2 → Merge input1 ─┤→ Enhance Article\n                        └→ Fetch Image 3 → Merge input2 ─┘\n\nError Handler         ─┐\n                        ├→ Fetch Image 1 → Merge input0 ─┐\n                        ├→ Fetch Image 2 → Merge input1 ─┤→ Enhance Article\n                        └→ Fetch Image 3 → Merge input2 ─┘",
-        "height": 540,
-        "width": 1020,
-        "color": 5
-      },
-      "id": "e644b454-41a8-4e65-afa7-bac9ba181cca",
-      "name": "Sticky Note - Images",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        12512,
-        -2400
-      ]
+      "position": [14528, -1520]
     }
   ],
   "connections": {
-    "Morning Trigger 10AM (Kyiv)": {
-      "main": [
-        [
-          {
-            "node": "Fetch Cooking RSS Feeds",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Evening Trigger 4:30PM (Kyiv)": {
-      "main": [
-        [
-          {
-            "node": "Fetch Cooking RSS Feeds",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Fetch Cooking RSS Feeds": {
-      "main": [
-        [
-          {
-            "node": "Parse & Select Article",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Parse & Select Article": {
-      "main": [
-        [
-          {
-            "node": "⚙️ SETUP",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "⚙️ SETUP": {
-      "main": [
-        [
-          {
-            "node": "Build Config",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Build Config": {
-      "main": [
-        [
-          {
-            "node": "Fetch WP Categories",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Fetch WP Categories": {
-      "main": [
-        [
-          {
-            "node": "Format Categories for Gemini",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Format Categories for Gemini": {
-      "main": [
-        [
-          {
-            "node": "Prepare AI Prompts",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Prepare AI Prompts": {
-      "main": [
-        [
-          {
-            "node": "Wait Before AI",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Wait Before AI": {
-      "main": [
-        [
-          {
-            "node": "Generate Article HTML (Mistral)",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Generate Article HTML (Mistral)": {
-      "main": [
-        [
-          {
-            "node": "Extract & Store HTML",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Generate Article HTML (Gemini)",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Generate Article HTML (Gemini)": {
-      "main": [
-        [
-          {
-            "node": "Extract & Store HTML",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Error Handler (Gemini)",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Error Handler (Gemini)": {
-      "main": [
-        [
-          {
-            "node": "Fetch Inline Image 1 (Pixabay)",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Fetch Inline Image 2 (Pixabay)",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Fetch Inline Image 3 (Pixabay)",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Extract & Store HTML": {
-      "main": [
-        [
-          {
-            "node": "Fetch Inline Image 1 (Pixabay)",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Fetch Inline Image 2 (Pixabay)",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Fetch Inline Image 3 (Pixabay)",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Fetch Inline Image 1 (Pixabay)": {
-      "main": [
-        [
-          {
-            "node": "Merge Images",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Fetch Inline Image 2 (Pixabay)": {
-      "main": [
-        [
-          {
-            "node": "Merge Images",
-            "type": "main",
-            "index": 1
-          }
-        ]
-      ]
-    },
-    "Merge Images": {
-      "main": [
-        [
-          {
-            "node": "Enhance Article",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Enhance Article": {
-      "main": [
-        [
-          {
-            "node": "Parse & Validate Article",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Parse & Validate Article": {
-      "main": [
-        [
-          {
-            "node": "Fetch Featured Image (Pixabay)",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Fetch Featured Image (Pixabay)": {
-      "main": [
-        [
-          {
-            "node": "Build Image URL",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Build Image URL": {
-      "main": [
-        [
-          {
-            "node": "Download Image Binary",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Download Image Binary": {
-      "main": [
-        [
-          {
-            "node": "Upload Media to WP",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Upload Media to WP": {
-      "main": [
-        [
-          {
-            "node": "Map Media ID",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Map Media ID": {
-      "main": [
-        [
-          {
-            "node": "Create WP Tags",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Prepare Post Body": {
-      "main": [
-        [
-          {
-            "node": "Publish WordPress Post",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Create WP Tags": {
-      "main": [
-        [
-          {
-            "node": "Prepare Post Body",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    }
+    "Morning Trigger 10AM (Kyiv)": { "main": [[{ "node": "Fetch Cooking RSS Feeds", "type": "main", "index": 0 }]] },
+    "Evening Trigger 4:30PM (Kyiv)": { "main": [[{ "node": "Fetch Cooking RSS Feeds", "type": "main", "index": 0 }]] },
+    "Fetch Cooking RSS Feeds": { "main": [[{ "node": "Parse & Select Article", "type": "main", "index": 0 }]] },
+    "Parse & Select Article": { "main": [[{ "node": "⚙️ SETUP", "type": "main", "index": 0 }]] },
+    "⚙️ SETUP": { "main": [[{ "node": "Build Config", "type": "main", "index": 0 }]] },
+    "Build Config": { "main": [[{ "node": "Fetch WP Categories", "type": "main", "index": 0 }]] },
+    "Fetch WP Categories": { "main": [[{ "node": "Format Categories for Gemini", "type": "main", "index": 0 }]] },
+    "Format Categories for Gemini": { "main": [[{ "node": "Prepare AI Prompts", "type": "main", "index": 0 }]] },
+    "Prepare AI Prompts": { "main": [[{ "node": "Wait Before AI", "type": "main", "index": 0 }]] },
+    "Wait Before AI": { "main": [[{ "node": "Generate Article HTML (Mistral)", "type": "main", "index": 0 }]] },
+    "Generate Article HTML (Mistral)": { "main": [[{ "node": "Extract & Store HTML", "type": "main", "index": 0 }], [{ "node": "Generate Article HTML (Gemini)", "type": "main", "index": 0 }]] },
+    "Generate Article HTML (Gemini)": { "main": [[{ "node": "Extract & Store HTML", "type": "main", "index": 0 }], [{ "node": "Error Handler (Gemini)", "type": "main", "index": 0 }]] },
+    "Error Handler (Gemini)": { "main": [[{ "node": "Fetch Inline Image 1 (Pixabay)", "type": "main", "index": 0 }, { "node": "Fetch Inline Image 2 (Pixabay)", "type": "main", "index": 0 }, { "node": "Fetch Inline Image 3 (Pixabay)", "type": "main", "index": 0 }]] },
+    "Extract & Store HTML": { "main": [[{ "node": "Fetch Inline Image 1 (Pixabay)", "type": "main", "index": 0 }, { "node": "Fetch Inline Image 2 (Pixabay)", "type": "main", "index": 0 }, { "node": "Fetch Inline Image 3 (Pixabay)", "type": "main", "index": 0 }]] },
+    "Fetch Inline Image 1 (Pixabay)": { "main": [[{ "node": "Merge Images", "type": "main", "index": 0 }]] },
+    "Fetch Inline Image 2 (Pixabay)": { "main": [[{ "node": "Merge Images", "type": "main", "index": 1 }]] },
+    "Fetch Inline Image 3 (Pixabay)": { "main": [[{ "node": "Merge Images", "type": "main", "index": 2 }]] },
+    "Merge Images": { "main": [[{ "node": "Enhance Article", "type": "main", "index": 0 }]] },
+    "Enhance Article": { "main": [[{ "node": "Parse & Validate Article", "type": "main", "index": 0 }]] },
+    "Parse & Validate Article": { "main": [[{ "node": "Fetch Featured Image (Pixabay)", "type": "main", "index": 0 }]] },
+    "Fetch Featured Image (Pixabay)": { "main": [[{ "node": "Build Image URL", "type": "main", "index": 0 }]] },
+    "Build Image URL": { "main": [[{ "node": "Download Image Binary", "type": "main", "index": 0 }]] },
+    "Download Image Binary": { "main": [[{ "node": "Upload Media to WP", "type": "main", "index": 0 }]] },
+    "Upload Media to WP": { "main": [[{ "node": "Map Media ID", "type": "main", "index": 0 }]] },
+    "Map Media ID": { "main": [[{ "node": "Create WP Tags", "type": "main", "index": 0 }]] },
+    "Create WP Tags": { "main": [[{ "node": "Prepare Post Body", "type": "main", "index": 0 }]] },
+    "Prepare Post Body": { "main": [[{ "node": "Publish WordPress Post", "type": "main", "index": 0 }]] }
   },
   "pinData": {},
-  "meta": {
-    "instanceId": "548ecc8c8b66354542236271705c5fba15257bfeeb6a0590df013e77efa360fb"
-  }
+  "meta": { "instanceId": "548ecc8c8b66354542236271705c5fba15257bfeeb6a0590df013e77efa360fb" }
 }
