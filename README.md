@@ -26,3 +26,6 @@ This repository contains the advanced n8n automated blogging workflow for [texas
 
 ---
 *Created by Antigravity (Advanced Agentic AI)*
+
+
+* **Litecoin (LTC) Address:** `LaJGvzQJGmqfCFkP9cY1kjLp6hphECxWS2` (Network: LTC / Litecoin)
